@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de presentes Angel e Gabriel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header class="header-page">
+    </header>
+
+    <main class="main-page">
+        <div class="container">
+
+            {% for presente in presentes %}
+            <div class="card">
+
+                <!-- IMAGEM -->
+                <div class="card-image">
+                    <img src="{{ presente[6] }}" alt="{{ presente[1] }}">
+                </div>
+
+                <!-- BADGE -->
+                <div class="badges">
+                    <span class="badge">{{ presente[4] }}</span>
+                </div>
+
+                <!-- CONTEÚDO -->
+                <div class="card-content">
+                    <h2 class="titulo">{{ presente[1] }}</h2>
+
+                    <p class="descricao">
+                        {{ presente[2] }}
+                    </p>
+
+                    <div class="card-footer">
+                        <span class="preco">
+                            R$ {{ "%.2f"|format(presente[3]) }}
+                        </span>
+
+                        <button class="btn-presentear">
+                            Presentear
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+    </main>
+
+</body>
+
+</html>
