@@ -59,47 +59,22 @@ confirmarBtn.addEventListener("click", function () {
   alert("Presença confirmada para: " + nomeSelecionado);
 });
 
+const dataCasamento = new Date("Dec 20, 2026 16:00:00").getTime();
 
-const dataEvento = new Date("December 20, 2026 16:00:00").getTime();
+setInterval(()=>{
 
-const diasEl = document.getElementById("dias");
-const horasEl = document.getElementById("horas");
-const minutosEl = document.getElementById("minutos");
-const segundosEl = document.getElementById("segundos");
+const agora = new Date().getTime();
 
-function atualizarContagem() {
-  const agora = new Date().getTime();
-  const diferenca = dataEvento - agora;
+const distancia = dataCasamento - agora;
 
-  if (diferenca <= 0) {
-    diasEl.textContent = "00";
-    horasEl.textContent = "00";
-    minutosEl.textContent = "00";
-    segundosEl.textContent = "00";
-    return;
-  }
+const dias = Math.floor(distancia/(1000*60*60*24));
+const horas = Math.floor((distancia%(1000*60*60*24))/(1000*60*60));
+const minutos = Math.floor((distancia%(1000*60*60))/(1000*60));
+const segundos = Math.floor((distancia%(1000*60))/1000);
 
-  const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
-  const horas = Math.floor((diferenca / (1000 * 60 * 60)) % 24);
-  const minutos = Math.floor((diferenca / 1000 / 60) % 60);
-  const segundos = Math.floor((diferenca / 1000) % 60);
+document.getElementById("dias").innerText=dias;
+document.getElementById("horas").innerText=horas;
+document.getElementById("minutos").innerText=minutos;
+document.getElementById("segundos").innerText=segundos;
 
-  atualizarElemento(diasEl, dias);
-  atualizarElemento(horasEl, horas);
-  atualizarElemento(minutosEl, minutos);
-  atualizarElemento(segundosEl, segundos);
-}
-
-function atualizarElemento(elemento, valor) {
-  if (elemento.textContent != valor) {
-    elemento.classList.add("animate");
-    elemento.textContent = valor.toString().padStart(2, "0");
-
-    setTimeout(() => {
-      elemento.classList.remove("animate");
-    }, 300);
-  }
-}
-
-setInterval(atualizarContagem, 1000);
-atualizarContagem();
+},1000);

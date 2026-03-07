@@ -1,14 +1,24 @@
+/* ==================================================
+VARIÁVEIS
+================================================== */
+
 :root {
   --azul-primario: #5F84C5;
   --azul-escuro: #2F3E5C;
   --azul-claro: #F2F6FD;
   --azul-suave: #E4ECF9;
-  --branco-glass: rgba(255,255,255,0.55);
-  --sombra-suave: 0 10px 30px rgba(47,62,92,0.08);
+
+  --branco-glass: rgba(255, 255, 255, 0.55);
+
+  --sombra-suave: 0 10px 30px rgba(47, 62, 92, 0.08);
+
   --radius-padrao: 28px;
 }
 
-/* RESET */
+
+/* ==================================================
+RESET
+================================================== */
 
 * {
   margin: 0;
@@ -16,7 +26,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   font-family: 'Cormorant Garamond', serif;
   background: var(--azul-claro);
@@ -25,7 +36,10 @@ html, body {
   scroll-behavior: smooth;
 }
 
-/* CONTAINER */
+
+/* ==================================================
+CONTAINER
+================================================== */
 
 .mobile-container {
   width: 100%;
@@ -34,7 +48,100 @@ html, body {
   position: relative;
 }
 
-/* ================= HERO ================= */
+
+/* ==================================================
+CONVITE
+================================================== */
+
+.convite {
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  background: var(--azul-claro);
+  border: 2px solid #333;
+}
+
+.topo {
+  font-size: 12px;
+  letter-spacing: 1px;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 30px;
+}
+
+.iniciais {
+  font-family: 'Great Vibes', cursive;
+  font-size: 70px;
+  color: #a8c6df;
+  margin-bottom: 20px;
+}
+
+.arco {
+  width: 415px;
+  height: 415px;
+  display: flex;
+  justify-content: start;
+  margin-bottom: 20px;
+}
+
+.versiculo {
+  max-width: 260px;
+  margin: 0 auto 30px auto;
+  font-size: 11px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.versiculo span {
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+
+/* ==================================================
+DATA DO CONVITE
+================================================== */
+
+.data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.numero {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  color: #777;
+}
+
+.lado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: #666;
+}
+
+.linha {
+  width: 60px;
+  height: 1px;
+  background: #b8a880;
+  margin: 5px 0;
+}
+
+.mes {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  color: #8c7f5a;
+  letter-spacing: 2px;
+}
+
+
+/* ==================================================
+HERO
+================================================== */
 
 .hero {
   position: relative;
@@ -60,8 +167,8 @@ html, body {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(242,246,253,0.2) 40%,
-    rgba(242,246,253,0.9) 85%,
+    rgba(242, 246, 253, 0.2) 40%,
+    rgba(242, 246, 253, 0.9) 85%,
     var(--azul-claro) 100%
   );
 }
@@ -97,7 +204,10 @@ html, body {
   font-size: 34px;
 }
 
-/* ================= SEÇÕES ================= */
+
+/* ==================================================
+SEÇÕES
+================================================== */
 
 section {
   padding: 100px 24px;
@@ -110,7 +220,10 @@ section {
   margin-bottom: 40px;
 }
 
-/* ================= CELEBRAÇÃO ================= */
+
+/* ==================================================
+CELEBRAÇÃO
+================================================== */
 
 .data {
   font-size: 22px;
@@ -134,7 +247,10 @@ section {
   margin-bottom: 40px;
 }
 
-/* ================= BOTÕES ================= */
+
+/* ==================================================
+BOTÕES
+================================================== */
 
 .buttons {
   display: flex;
@@ -143,17 +259,21 @@ section {
 }
 
 .btn-primary {
-  background: var(--azul-primario);
-  color: white;
-  padding: 18px;
-  border-radius: 50px;
-  text-decoration: none;
-  font-size: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 12px 25px rgba(95,132,197,0.35);
+
+  padding: 18px;
+  border-radius: 50px;
+
+  font-size: 15px;
+  text-decoration: none;
+
+  color: white;
+  background: var(--azul-primario);
+
+  box-shadow: 0 12px 25px rgba(95, 132, 197, 0.35);
   transition: 0.3s ease;
 }
 
@@ -162,20 +282,26 @@ section {
 }
 
 .btn-outline {
-  border: 1.5px solid var(--azul-primario);
-  color: var(--azul-escuro);
   padding: 18px;
   border-radius: 50px;
-  text-decoration: none;
+
   font-size: 15px;
+  text-decoration: none;
+
+  border: 1.5px solid var(--azul-primario);
+  color: var(--azul-escuro);
+
   transition: 0.3s ease;
 }
 
 .btn-outline:hover {
-  background: rgba(95,132,197,0.08);
+  background: rgba(95, 132, 197, 0.08);
 }
 
-/* ================= CONFIRMAÇÃO ================= */
+
+/* ==================================================
+CONFIRMAÇÃO
+================================================== */
 
 .input-group {
   position: relative;
@@ -186,26 +312,32 @@ section {
   width: 100%;
   padding: 18px 22px;
   border-radius: 50px;
-  border: 1px solid rgba(47,62,92,0.15);
+  border: 1px solid rgba(47, 62, 92, 0.15);
+
   font-size: 15px;
   outline: none;
+
   transition: 0.3s;
 }
 
 .input-group input:focus {
   border-color: var(--azul-primario);
-  box-shadow: 0 0 0 3px rgba(95,132,197,0.15);
+  box-shadow: 0 0 0 3px rgba(95, 132, 197, 0.15);
 }
 
 .sugestoes {
   position: absolute;
   width: 100%;
+  margin-top: 10px;
+
   background: white;
   border-radius: 20px;
-  margin-top: 10px;
+
   box-shadow: var(--sombra-suave);
+
   max-height: 200px;
   overflow-y: auto;
+
   display: none;
 }
 
@@ -217,88 +349,81 @@ section {
 }
 
 .sugestao-item:hover {
-  background: rgba(95,132,197,0.08);
+  background: rgba(95, 132, 197, 0.08);
 }
 
-/* ================= COUNTDOWN ================= */
 
-.countdown-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-  max-width: 360px;
-  margin: 40px auto 0;
+/* ==================================================
+COUNTDOWN
+================================================== */
+
+.countdown{
+padding:80px 20px;
+text-align:center;
 }
 
-.time-box {
-  background: var(--branco-glass);
-  backdrop-filter: blur(12px);
-  padding: 28px 10px;
-  border-radius: var(--radius-padrao);
-  box-shadow: var(--sombra-suave);
-  transition: 0.3s ease;
+.countdown-grid{
+display:flex;
+justify-content:center;
+gap:30px;
+margin-top:30px;
 }
 
-.time-box span {
-  font-size: 26px;
-  font-weight: 600;
-  display: block;
-  margin-bottom: 6px;
-  transition: 0.3s ease;
+.countdown-grid span{
+font-size:40px;
+font-weight:bold;
 }
-
-.time-box small {
-  font-size: 11px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  opacity: 0.6;
-}
-
-.time-box span.animate {
-  transform: scale(1.1);
-  color: var(--azul-primario);
-}
-
-/* ================= FOOTER ================= */
+/* ==================================================
+FOOTER
+================================================== */
 
 .mobile-footer {
   position: fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
+
   width: 92%;
   max-width: 390px;
   height: 75px;
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(20px);
-  border-radius: 50px;
+
   display: flex;
   justify-content: space-around;
   align-items: center;
+
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+
+  border-radius: 50px;
   box-shadow: var(--sombra-suave);
 }
 
 .footer-item {
-  text-decoration: none;
-  color: var(--azul-escuro);
-  font-size: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
+
+  font-size: 10px;
+  text-decoration: none;
+  color: var(--azul-escuro);
 }
 
 .footer-item .icon {
   font-size: 20px;
 }
 
-/* ================= ANIMAÇÃO ================= */
+
+/* ==================================================
+ANIMAÇÕES
+================================================== */
 
 @keyframes fadeUp {
   from {
     opacity: 0;
     transform: translateY(25px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
