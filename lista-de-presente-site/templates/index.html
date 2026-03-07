@@ -14,6 +14,77 @@
     </header>
 
     <main class="main-page">
+        <div class="filtro-container">
+            <form method="GET" action="/" class="filtro-form">
+
+                <div class="filtro-titulo">
+                    <span>🔻</span>
+                    <p>Filtrar presentes</p>
+                </div>
+
+                <div class="filtros">
+
+                    <!-- BUSCA AUTOMÁTICA -->
+                    <div class="input-busca">
+                        <input type="text" name="busca" placeholder="Buscar presente..."
+                            value="{{ request.args.get('busca','') }}" oninput="this.form.submit()">
+                    </div>
+
+                    <!-- CATEGORIA -->
+                    <select name="categoria" onchange="this.form.submit()">
+
+                        <option value="">Todas</option>
+
+                        <option value="Outro" {% if request.args.get('categoria')=='Outro' %}selected{% endif %}>
+                            Outro
+                        </option>
+
+                        <option value="Sala" {% if request.args.get('categoria')=='Sala' %}selected{% endif %}>
+                            Sala
+                        </option>
+
+                        <option value="Cozinha" {% if request.args.get('categoria')=='Cozinha' %}selected{% endif %}>
+                            Cozinha
+                        </option>
+
+                        <option value="Quarto" {% if request.args.get('categoria')=='Quarto' %}selected{% endif %}>
+                            Quarto
+                        </option>
+
+                        <option value="Decoração" {% if request.args.get('categoria')=='Decoração' %}selected{% endif
+                            %}>
+                            Decoração
+                        </option>
+
+                        <option value="Experiência" {% if request.args.get('categoria')=='Experiência' %}selected{%
+                            endif %}>
+                            Experiência
+                        </option>
+
+                        <option value="Eletrônicos" {% if request.args.get('categoria')=='Eletrônicos' %}selected{%
+                            endif %}>
+                            Eletrônicos
+                        </option>
+
+                        <option value="Banheiro" {% if request.args.get('categoria')=='Banheiro' %}selected{% endif %}>
+                            Banheiro
+                        </option>
+
+                    </select>
+
+                    <!-- DISPONÍVEIS -->
+                    <select name="somente_disponiveis" onchange="this.form.submit()">
+                        <option value="">Todos</option>
+                        <option value="true" {% if request.args.get('somente_disponiveis')=='true' %}selected{% endif
+                            %}>
+                            Disponíveis
+                        </option>
+                    </select>
+
+                </div>
+
+            </form>
+        </div>
         <div class="container">
 
             {% for presente in presentes %}
@@ -42,7 +113,10 @@
                             R$ {{ "%.2f"|format(presente[3]) }}
                         </span>
 
-                        <button class="btn-presentear">
+                        <button class="btn-presentear" data-id="{{ presente[0] }}" data-nome="{{ presente[1] }}"
+                            data-preco="{{ presente[3] }}" data-imagem="{{ presente[6] }}"
+                            data-pix="b34aa271-fe01-4dd3-a076-906fe6c589ce" data-amazon="https://amazon.com.br"
+                            onclick="abrirModal(this)">
                             Presentear
                         </button>
                     </div>
@@ -51,9 +125,79 @@
             </div>
             {% endfor %}
 
+            <div id="modal-presente" class="modal">
+
+                <div class="modal-content">
+
+                    <span class="fechar" onclick="fecharModal()">✕</span>
+
+                    <h2>Confirmar Presente</h2>
+
+                    <div class="modal-produto">
+
+                        <img id="modal-img">
+
+                        <div>
+                            <h3 id="modal-nome"></h3>
+                            <p id="modal-preco"></p>
+                            <p>PIX</p>
+                        </div>
+
+                    </div>
+
+                    <div class="pix-box">
+
+                        <p>Chave PIX para pagamento:</p>
+
+                        <div class="pix-copy">
+
+                            <input id="pix-chave" readonly>
+
+                            <button onclick="copiarPix()">Copiar</button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="amazon-box">
+
+                        <button id="btn-amazon" target="_blank">
+                            Ver na Amazon
+                        </button>
+
+                    </div>
+
+                    <form id="form-reserva">
+
+                        <input type="hidden" id="presente-id">
+
+                        <label>Seu nome *</label>
+                        <input type="text" id="nome" required>
+
+                        <label>Seu contato *</label>
+                        <input type="text" id="telefone" required>
+
+                        <div class="modal-actions">
+
+                            <button type="button" onclick="fecharModal()">
+                                Cancelar
+                            </button>
+
+                            <button type="submit">
+                                Confirmar Reserva
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
         </div>
     </main>
-
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
 </html>
