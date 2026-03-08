@@ -1,0 +1,79 @@
+.countdown {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+}
+
+.countdownTitle {
+  font-size: 36px;
+  font-weight: 600;
+  color: #2c4a73;
+  margin-bottom: 10px;
+}
+
+.countdownSubtitle {
+  font-size: 16px;
+  color: #6b86a8;
+  margin-bottom: 40px;
+}
+
+.countdownGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 120px);
+  justify-content: center;
+  gap: 20px;
+}
+
+/* caixas de tempo */
+
+.timeBox {
+  background: white;
+  border-radius: 14px;
+  padding: 20px 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  box-shadow: 0 6px 20px rgba(80, 120, 200, 0.12);
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.timeBox:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(80, 120, 200, 0.18);
+}
+
+/* número */
+
+.timeBox span {
+  font-size: 34px;
+  font-weight: 700;
+  color: #3a6db0;
+  margin-bottom: 6px;
+}
+
+/* label */
+
+.timeBox small {
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #7b93b8;
+  text-transform: uppercase;
+}
+
+/* responsivo */
+
+@media (max-width: 600px) {
+
+  .countdownGrid {
+    grid-template-columns: repeat(2, 110px);
+    gap: 15px;
+  }
+
+  .timeBox span {
+    font-size: 28px;
+  }
+
+}

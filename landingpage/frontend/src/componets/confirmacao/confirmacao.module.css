@@ -1,0 +1,79 @@
+.confirmacao{
+padding:100px 20px;
+background:#f7fbff;
+display:flex;
+justify-content:center;
+}
+
+.card{
+background:white;
+padding:40px;
+border-radius:14px;
+max-width:500px;
+width:100%;
+text-align:center;
+box-shadow:0 10px 30px rgba(80,120,200,0.15);
+}
+
+.titulo{
+font-size:32px;
+color:#2c4a73;
+font-family:"Playfair Display",serif;
+margin-bottom:10px;
+}
+
+.descricao{
+color:#6a7f9f;
+margin-bottom:30px;
+}
+
+.inputGroup{
+position:relative;
+}
+
+.inputGroup input{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid #cbd8ee;
+outline:none;
+color: #5474b8;
+}
+
+.sugestoes{
+position:absolute;
+background:white;
+width:100%;
+border-radius:8px;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
+margin-top:5px;
+z-index:10;
+color: #5474b8;
+}
+
+.sugestaoItem{
+padding:10px;
+cursor:pointer;
+}
+
+.sugestaoItem:hover{
+background:#eeeded;
+}
+
+.buttons{
+margin-top:25px;
+}
+
+.confirmarBtn{
+background:#9fb7de;
+color:white;
+padding:12px 25px;
+border:none;
+border-radius:30px;
+cursor:not-allowed;
+}
+
+.confirmarBtn.ativo{
+background:#4f80c9;
+cursor:pointer;
+}
