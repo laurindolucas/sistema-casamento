@@ -8,9 +8,9 @@ VARIÁVEIS
   --azul-claro: #F2F6FD;
   --azul-suave: #E4ECF9;
 
-  --branco-glass: rgba(255, 255, 255, 0.55);
+  --branco-glass: rgba(255,255,255,0.55);
 
-  --sombra-suave: 0 10px 30px rgba(47, 62, 92, 0.08);
+  --sombra-suave: 0 10px 30px rgba(47,62,92,0.08);
 
   --radius-padrao: 28px;
 }
@@ -20,20 +20,20 @@ VARIÁVEIS
 RESET
 ================================================== */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
 html,
-body {
-  width: 100%;
-  font-family: 'Cormorant Garamond', serif;
-  background: var(--azul-claro);
-  color: var(--azul-escuro);
-  overflow-x: hidden;
-  scroll-behavior: smooth;
+body{
+  width:100%;
+  font-family:'Cormorant Garamond',serif;
+  background:var(--azul-claro);
+  color:var(--azul-escuro);
+  overflow-x:hidden;
+  scroll-behavior:smooth;
 }
 
 
@@ -41,11 +41,11 @@ body {
 CONTAINER
 ================================================== */
 
-.mobile-container {
-  width: 100%;
-  max-width: 430px;
-  margin: 0 auto;
-  position: relative;
+.mobile-container{
+  width:100%;
+  max-width:430px;
+  margin:0 auto;
+  position:relative;
 }
 
 
@@ -53,89 +53,145 @@ CONTAINER
 CONVITE
 ================================================== */
 
-.convite {
-  max-width: 420px;
-  width: 100%;
-  text-align: center;
-  background: var(--azul-claro);
-  border: 2px solid #333;
-}
+.convite{
+  width:100%;
+  max-width:420px;
 
-.topo {
-  font-size: 12px;
-  letter-spacing: 1px;
-  line-height: 1.6;
-  color: #444;
-  margin-bottom: 30px;
-}
+  padding:45px 30px;
 
-.iniciais {
-  font-family: 'Great Vibes', cursive;
-  font-size: 70px;
-  color: #a8c6df;
-  margin-bottom: 20px;
-}
+  background:#fff;
 
-.arco {
-  width: 415px;
-  height: 415px;
-  display: flex;
-  justify-content: start;
-  margin-bottom: 20px;
-}
+  border-radius:20px;
 
-.versiculo {
-  max-width: 260px;
-  margin: 0 auto 30px auto;
-  font-size: 11px;
-  color: #555;
-  line-height: 1.5;
-}
+  text-align:center;
 
-.versiculo span {
-  font-size: 10px;
-  letter-spacing: 2px;
+  box-shadow:var(--sombra-suave);
+
+  animation:fadeUp 1.2s ease;
 }
 
 
-/* ==================================================
-DATA DO CONVITE
-================================================== */
+/* TEXTO SUPERIOR */
 
-.data {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 10px;
+.topo{
+  margin-bottom:20px;
+
+  font-size:13px;
+  line-height:1.8;
+  letter-spacing:2px;
+
+  color:#555;
 }
 
-.numero {
-  font-family: 'Playfair Display', serif;
-  font-size: 48px;
-  color: #777;
+.topo strong{
+  font-weight:500;
+  color:var(--azul-escuro);
 }
 
-.lado {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 12px;
-  color: #666;
+
+/* MONOGRAMA */
+
+.monograma{
+  margin:20px 0;
+
+  font-family:'Playfair Display',serif;
+  font-size:70px;
+  font-weight:500;
+  letter-spacing:4px;
+
+  color:var(--azul-escuro);
 }
 
-.linha {
-  width: 60px;
-  height: 1px;
-  background: #b8a880;
-  margin: 5px 0;
+.simbolo{
+  margin:0 8px;
+
+  font-size:40px;
+
+  opacity:0.7;
 }
 
-.mes {
-  font-family: 'Playfair Display', serif;
-  font-size: 14px;
-  color: #8c7f5a;
-  letter-spacing: 2px;
+
+/* ILUSTRAÇÃO */
+
+.arco{
+  margin:30px 0;
+}
+
+.arco img{
+  width:100%;
+  max-width:300px;
+}
+
+
+/* VERSÍCULO */
+
+.versiculo{
+  margin:30px 0;
+
+  font-size:14px;
+  line-height:1.8;
+  font-style:italic;
+
+  color:#555;
+}
+
+.versiculo span{
+  display:block;
+
+  margin-top:10px;
+
+  font-size:12px;
+  letter-spacing:2px;
+
+  color:#888;
+}
+
+
+/* DATA DO CONVITE */
+
+.data{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  gap:25px;
+
+  margin-top:20px;
+}
+
+.numero{
+  font-family:'Playfair Display',serif;
+  font-size:60px;
+  color:var(--azul-escuro);
+}
+
+.lado{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  font-size:12px;
+  letter-spacing:2px;
+
+  color:#777;
+}
+
+.linha{
+  width:60px;
+  height:1px;
+
+  margin:6px 0;
+
+  background:#d6c69a;
+}
+
+.mes{
+  margin-top:10px;
+
+  font-size:13px;
+  letter-spacing:3px;
+
+  color:#777;
 }
 
 
@@ -143,65 +199,73 @@ DATA DO CONVITE
 HERO
 ================================================== */
 
-.hero {
-  position: relative;
-  height: 100vh;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 80px 24px;
-  text-align: center;
+.hero{
+  position:relative;
+
+  height:100vh;
+
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+
+  padding:80px 24px;
+
+  text-align:center;
 }
 
-.hero-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.85);
+.hero-image{
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  filter:brightness(0.85);
 }
 
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
+.overlay{
+  position:absolute;
+  inset:0;
+
+  background:linear-gradient(
     to bottom,
-    rgba(242, 246, 253, 0.2) 40%,
-    rgba(242, 246, 253, 0.9) 85%,
-    var(--azul-claro) 100%
+    rgba(242,246,253,0.2) 40%,
+    rgba(0,94,255,0.9) 85%,
+    rgba(0,94,255,0.9) 100%
   );
 }
 
-.hero-content {
-  position: relative;
-  z-index: 2;
-  animation: fadeUp 1.2s ease forwards;
+.hero-content{
+  position:relative;
+  z-index:2;
+
+  animation:fadeUp 1.2s ease forwards;
 }
 
-.monograma {
-  font-size: 52px;
-  margin-bottom: 20px;
+.frase{
+  margin-bottom:24px;
+
+  font-size:15px;
+  line-height:1.6;
+
+  font-style:italic;
 }
 
-.frase {
-  font-size: 15px;
-  line-height: 1.6;
-  margin-bottom: 24px;
-  font-style: italic;
+.bencao{
+  margin-bottom:14px;
+
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+
+  opacity:0.8;
 }
 
-.bencao {
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-  opacity: 0.8;
-}
-
-.assinatura {
-  font-family: 'Allura', cursive;
-  font-size: 34px;
+.assinatura{
+  font-family:'Allura',cursive;
+  font-size:34px;
 }
 
 
@@ -209,15 +273,17 @@ HERO
 SEÇÕES
 ================================================== */
 
-section {
-  padding: 100px 24px;
-  text-align: center;
-  animation: fadeUp 1s ease both;
+section{
+  padding:100px 24px;
+
+  text-align:center;
+
+  animation:fadeUp 1s ease both;
 }
 
-.titulo {
-  font-size: 34px;
-  margin-bottom: 40px;
+.titulo{
+  margin-bottom:40px;
+  font-size:34px;
 }
 
 
@@ -225,26 +291,28 @@ section {
 CELEBRAÇÃO
 ================================================== */
 
-.data {
-  font-size: 22px;
-  margin-bottom: 8px;
+.data-evento{
+  font-size:22px;
+  margin-bottom:8px;
 }
 
-.hora {
-  font-size: 15px;
-  opacity: 0.7;
-  margin-bottom: 28px;
+.hora{
+  margin-bottom:28px;
+
+  font-size:15px;
+  opacity:0.7;
 }
 
-.local {
-  font-size: 17px;
-  margin-bottom: 4px;
+.local{
+  margin-bottom:4px;
+  font-size:17px;
 }
 
-.cidade {
-  font-size: 14px;
-  opacity: 0.6;
-  margin-bottom: 40px;
+.cidade{
+  margin-bottom:40px;
+
+  font-size:14px;
+  opacity:0.6;
 }
 
 
@@ -252,50 +320,53 @@ CELEBRAÇÃO
 BOTÕES
 ================================================== */
 
-.buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+.buttons{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
 }
 
-.btn-primary {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+.btn-primary{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
 
-  padding: 18px;
-  border-radius: 50px;
+  padding:18px;
 
-  font-size: 15px;
-  text-decoration: none;
+  border-radius:50px;
 
-  color: white;
-  background: var(--azul-primario);
+  font-size:15px;
+  text-decoration:none;
 
-  box-shadow: 0 12px 25px rgba(95, 132, 197, 0.35);
-  transition: 0.3s ease;
+  color:#fff;
+  background:var(--azul-primario);
+
+  box-shadow:0 12px 25px rgba(95,132,197,0.35);
+
+  transition:0.3s ease;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
+.btn-primary:hover{
+  transform:translateY(-2px);
 }
 
-.btn-outline {
-  padding: 18px;
-  border-radius: 50px;
+.btn-outline{
+  padding:18px;
 
-  font-size: 15px;
-  text-decoration: none;
+  border-radius:50px;
 
-  border: 1.5px solid var(--azul-primario);
-  color: var(--azul-escuro);
+  font-size:15px;
+  text-decoration:none;
 
-  transition: 0.3s ease;
+  border:1.5px solid var(--azul-primario);
+  color:var(--azul-escuro);
+
+  transition:0.3s ease;
 }
 
-.btn-outline:hover {
-  background: rgba(95, 132, 197, 0.08);
+.btn-outline:hover{
+  background:rgba(95,132,197,0.08);
 }
 
 
@@ -303,53 +374,61 @@ BOTÕES
 CONFIRMAÇÃO
 ================================================== */
 
-.input-group {
-  position: relative;
-  margin-bottom: 30px;
+.input-group{
+  position:relative;
+  margin-bottom:30px;
 }
 
-.input-group input {
-  width: 100%;
-  padding: 18px 22px;
-  border-radius: 50px;
-  border: 1px solid rgba(47, 62, 92, 0.15);
+.input-group input{
+  width:100%;
 
-  font-size: 15px;
-  outline: none;
+  padding:18px 22px;
 
-  transition: 0.3s;
+  border-radius:50px;
+  border:1px solid rgba(47,62,92,0.15);
+
+  font-size:15px;
+
+  outline:none;
+
+  transition:0.3s;
 }
 
-.input-group input:focus {
-  border-color: var(--azul-primario);
-  box-shadow: 0 0 0 3px rgba(95, 132, 197, 0.15);
+.input-group input:focus{
+  border-color:var(--azul-primario);
+  box-shadow:0 0 0 3px rgba(95,132,197,0.15);
 }
 
-.sugestoes {
-  position: absolute;
-  width: 100%;
-  margin-top: 10px;
+.sugestoes{
+  position:absolute;
 
-  background: white;
-  border-radius: 20px;
+  width:100%;
+  margin-top:10px;
 
-  box-shadow: var(--sombra-suave);
+  background:#fff;
 
-  max-height: 200px;
-  overflow-y: auto;
+  border-radius:20px;
 
-  display: none;
+  box-shadow:var(--sombra-suave);
+
+  max-height:200px;
+  overflow-y:auto;
+
+  display:none;
 }
 
-.sugestao-item {
-  padding: 16px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
+.sugestao-item{
+  padding:16px;
+
+  font-size:14px;
+
+  cursor:pointer;
+
+  transition:0.2s;
 }
 
-.sugestao-item:hover {
-  background: rgba(95, 132, 197, 0.08);
+.sugestao-item:hover{
+  background:rgba(95,132,197,0.08);
 }
 
 
@@ -358,59 +437,66 @@ COUNTDOWN
 ================================================== */
 
 .countdown{
-padding:80px 20px;
-text-align:center;
+  padding:80px 20px;
+  text-align:center;
 }
 
 .countdown-grid{
-display:flex;
-justify-content:center;
-gap:30px;
-margin-top:30px;
+  display:flex;
+  justify-content:center;
+  gap:30px;
+
+  margin-top:30px;
 }
 
 .countdown-grid span{
-font-size:40px;
-font-weight:bold;
+  font-size:40px;
+  font-weight:bold;
 }
+
+
 /* ==================================================
 FOOTER
 ================================================== */
 
-.mobile-footer {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+.mobile-footer{
+  position:fixed;
 
-  width: 92%;
-  max-width: 390px;
-  height: 75px;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
 
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  width:92%;
+  max-width:390px;
 
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(20px);
+  height:75px;
 
-  border-radius: 50px;
-  box-shadow: var(--sombra-suave);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+
+  background:var(--branco-glass);
+  backdrop-filter:blur(20px);
+
+  border-radius:50px;
+
+  box-shadow:var(--sombra-suave);
 }
 
-.footer-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
+.footer-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
 
-  font-size: 10px;
-  text-decoration: none;
-  color: var(--azul-escuro);
+  font-size:10px;
+  text-decoration:none;
+
+  color:var(--azul-escuro);
 }
 
-.footer-item .icon {
-  font-size: 20px;
+.footer-item .icon{
+  font-size:20px;
 }
 
 
@@ -418,14 +504,14 @@ FOOTER
 ANIMAÇÕES
 ================================================== */
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(25px);
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(25px);
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  to{
+    opacity:1;
+    transform:translateY(0);
   }
 }
