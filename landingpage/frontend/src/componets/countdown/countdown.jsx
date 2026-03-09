@@ -5,6 +5,13 @@ import styles from "./countdown.module.css"
 
 export default function Countdown() {
 
+      const url =
+    "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+    "&text=Casamento+Angélica+e+Gabriel" +
+    "&dates=20260927T150000/20260927T230000" +
+    "&details=Venha+celebrar+conosco+nosso+casamento!" +
+    "&location=Cidade+Estado";
+
     const dataCasamento = new Date("sep 27, 2026 15:00:00").getTime()
 
     const [tempo, setTempo] = useState({
@@ -72,6 +79,12 @@ export default function Countdown() {
                 </div>
 
             </div>
+            <a className={styles.button} href={url} target="_blank" rel="noopener noreferrer" >
+                <button>
+                    Adicionar à Agenda
+                </button>
+            </a>
+
 
         </section>
     )

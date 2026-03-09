@@ -3,12 +3,13 @@ import {
   FiEdit3,
   FiClock,
   FiMail,
-  FiUser,
   FiVolumeX,
   FiHeart,
   FiCamera,
-  FiCoffee
+  FiCoffee,
 } from "react-icons/fi"
+import { FaGlassCheers } from "react-icons/fa"
+import { GiDiamondRing } from "react-icons/gi";
 
 export default function Manual() {
   return (
@@ -41,7 +42,7 @@ export default function Manual() {
         </div>
 
         <div className={styles.item}>
-          <FiUser />
+          <GiDiamondRing />
           <p>Branco é a cor da noiva.</p>
         </div>
 
@@ -61,7 +62,7 @@ export default function Manual() {
         </div>
 
         <div className={styles.item}>
-          <FiCoffee />
+          <FaGlassCheers/>
           <p>Celebre conosco este momento.</p>
         </div>
 

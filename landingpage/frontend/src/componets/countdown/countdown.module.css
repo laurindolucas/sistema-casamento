@@ -6,9 +6,11 @@
 
 .countdownTitle {
   font-size: 36px;
-  font-weight: 600;
+  font-weight: 400;
   color: #2c4a73;
   margin-bottom: 10px;
+  font-family:"Playfair Display",serif;
+
 }
 
 .countdownSubtitle {
@@ -43,6 +45,26 @@
 .timeBox:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 25px rgba(80, 120, 200, 0.18);
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  background: #4f80c9;
+  color: white;
+
+  padding: 12px 50px;
+  border-radius: 30px;
+
+  text-decoration: none;
+  font-size: 14px;
+    margin-top: 20px;
+  transition: 0.25s;
+}
+
+.button:hover {
+  background: #3f6fb5;
 }
 
 /* número */

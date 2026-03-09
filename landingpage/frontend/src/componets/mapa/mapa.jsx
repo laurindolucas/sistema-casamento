@@ -16,7 +16,7 @@ export default function Mapa() {
         </div>
 
         <div className={styles.divider}></div>
-
+        <p className={styles.date}>Espaço Jardim Colonial</p>
         <p className={styles.location}>
           RUA IRAPUÃ, 370, IPSEP, RECIFE-PE
         </p>
