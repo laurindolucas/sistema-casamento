@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Presentes</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>🎁 Dashboard Lista de Presentes</h1>
+
+<table>
+
+<thead>
+<tr>
+<th>Nome</th>
+<th>Categoria</th>
+<th>Valor</th>
+<th>Status</th>
+<th>Ações</th>
+</tr>
+</thead>
+
+<tbody id="tabelaPresentes"></tbody>
+
+</table>
+
+
+<!-- MODAL EDITAR -->
+
+<div id="modalEditar" class="modal">
+
+<div class="modal-content">
+
+<span class="fechar" onclick="fecharModal('modalEditar')">&times;</span>
+
+<h2>Editar Presente</h2>
+
+<form id="formEditar">
+
+<input type="hidden" id="edit_id">
+
+<label>Nome</label>
+<input type="text" id="edit_nome">
+
+<label>Descrição</label>
+<textarea id="edit_descricao"></textarea>
+
+<label>Valor</label>
+<input type="number" id="edit_valor">
+
+<label>Categoria</label>
+<input type="text" id="edit_categoria">
+
+<label>Tipo pagamento</label>
+<input type="text" id="edit_pagamento">
+
+<label>URL Imagem</label>
+<input type="text" id="edit_imagem">
+
+<label>Quantidade</label>
+<input type="number" id="edit_quantidade">
+
+<button type="submit">Salvar</button>
+
+</form>
+
+</div>
+</div>
+
+
+
+<!-- MODAL INFO -->
+
+<div id="modalInfo" class="modal">
+
+<div class="modal-content">
+
+<span class="fechar" onclick="fecharModal('modalInfo')">&times;</span>
+
+<h2>Informações da Reserva</h2>
+
+<div id="infoReserva"></div>
+
+</div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

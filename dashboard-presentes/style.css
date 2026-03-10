@@ -1,0 +1,177 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family: 'Segoe UI', Arial, sans-serif;
+background:#eef2f6;
+color:#333;
+padding:40px;
+}
+
+/* TITULO */
+
+h1{
+text-align:center;
+font-size:38px;
+margin-bottom:30px;
+font-weight:600;
+color:#2c2c2c;
+}
+
+/* CONTAINER */
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:14px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* HEADER */
+
+th{
+background:#2f3e52;
+color:white;
+font-weight:500;
+padding:16px;
+text-align:left;
+}
+
+/* CELULAS */
+
+td{
+padding:14px 16px;
+border-bottom:1px solid #eee;
+}
+
+/* LINHA HOVER */
+
+tr:hover{
+background:#f6f8fb;
+}
+
+/* STATUS */
+
+.disponivel{
+color:#2ecc71;
+font-weight:600;
+}
+
+.reservado{
+color:#e74c3c;
+font-weight:600;
+}
+
+/* BOTÕES */
+
+button{
+padding:8px 14px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:13px;
+transition:0.2s;
+}
+
+button:hover{
+opacity:0.9;
+transform:translateY(-1px);
+}
+
+.info{
+background:#5d84c3;
+color:white;
+}
+
+.edit{
+background:#f4b740;
+color:white;
+}
+
+.delete{
+background:#e35d5b;
+color:white;
+}
+
+/* MODAL */
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.35);
+backdrop-filter:blur(4px);
+}
+
+/* CONTEÚDO DO MODAL */
+
+.modal-content{
+background:white;
+width:480px;
+margin:8% auto;
+padding:30px;
+border-radius:14px;
+box-shadow:0 20px 40px rgba(0,0,0,0.15);
+animation:modalOpen 0.25s ease;
+}
+
+/* ANIMAÇÃO */
+
+@keyframes modalOpen{
+from{
+opacity:0;
+transform:translateY(-20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* BOTÃO FECHAR */
+
+.fechar{
+float:right;
+font-size:24px;
+cursor:pointer;
+color:#888;
+}
+
+.fechar:hover{
+color:#000;
+}
+
+/* FORM */
+
+input, textarea{
+width:100%;
+padding:10px;
+margin-bottom:12px;
+border-radius:8px;
+border:1px solid #ddd;
+font-size:14px;
+}
+
+textarea{
+resize:none;
+height:80px;
+}
+
+/* BOTÃO SALVAR */
+
+form button{
+background:#5d84c3;
+color:white;
+width:100%;
+margin-top:10px;
+font-size:15px;
+padding:10px;
+}
