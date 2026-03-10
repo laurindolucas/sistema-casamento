@@ -7,11 +7,13 @@ export default function Gifts() {
 
       <div className={styles.container}>
 
-        <div className={styles.header}>
-          <h2 className={styles.title}>Lista de Presentes</h2>
+        <div className={`${styles.header} animate fade-down`}>
+          <h2 className={`${styles.title} animate fade-up delay-1`}>
+            Lista de Presentes
+          </h2>
         </div>
 
-        <p className={styles.description}>
+        <p className={`${styles.description} animate fade-up delay-2`}>
           Queridos amigos e familiares, como já dividimos o mesmo teto,
           nossa casa já está quase toda montada. Criamos então um espaço
           para que vocês possam nos presentear de forma simples e divertida.
@@ -19,7 +21,7 @@ export default function Gifts() {
 
         <div className={styles.cards}>
 
-          <div className={styles.card}>
+          <div className={`${styles.card} animate fade-up delay-1`}>
             <FaGift />
             <h3>Escolha um presente</h3>
             <p>
@@ -28,7 +30,7 @@ export default function Gifts() {
             </p>
           </div>
 
-          <div className={styles.card}>
+          <div className={`${styles.card} animate fade-up delay-2`}>
             <FaGlassCheers />
             <h3>Lembranças da Lua de Mel</h3>
             <p>
@@ -37,7 +39,7 @@ export default function Gifts() {
             </p>
           </div>
 
-          <div className={styles.card}>
+          <div className={`${styles.card} animate fade-up delay-3`}>
             <FaHeart />
             <h3>Contribua com carinho</h3>
             <p>
@@ -48,14 +50,14 @@ export default function Gifts() {
 
         </div>
 
-        <p className={styles.message}>
+        <p className={`${styles.message} animate fade-up delay-3`}>
           É tudo muito simples: escolha uma cota, divirta-se com as
           descrições e contribua via PIX ou diretamente pelo link
           da loja. Muito obrigado por fazerem parte da nossa vida!
         </p>
 
         <a
-          className={styles.button}
+          className={`${styles.button} animate zoom-in delay-4`}
           href="https://site-da-lista.com"
           target="_blank"
         >

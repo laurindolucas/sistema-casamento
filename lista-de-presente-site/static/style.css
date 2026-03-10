@@ -26,7 +26,7 @@ body{
 /* FILTROS */
 
 .filtro-container{
-  margin-top:40px;
+  margin-top:10px;
   margin-bottom:30px;
   background:white;
   border-radius:16px;
@@ -54,6 +54,7 @@ body{
   border-radius:8px;
   border:1px solid #dcdcdc;
   font-size:14px;
+  width: 500px;
 }
 
 .input-busca{
@@ -284,4 +285,195 @@ body{
 .modal-actions button:last-child{
   background:var(--azul-primario);
   color:white;
+}
+
+.gift-intro{
+    padding:10px 20px;
+    padding-top: 50px;
+    text-align:center;
+}
+
+.gift-intro-container{
+    max-width:900px;
+    margin:auto;
+}
+
+.gift-title{
+    font-family:'Cormorant Garamond', serif;
+    font-size:52px;
+    color:#2d3440;
+    font-weight:600;
+}
+
+.gift-divider{
+    width:100px;
+    height:2px;
+    background:#2F3E5C;
+    margin:20px auto 30px;
+}
+
+.gift-description{
+    font-size:18px;
+    line-height:1.7;
+    color:#555;
+    margin-bottom:16px;
+}
+
+/* ============================= */
+/* TABLET */
+/* ============================= */
+
+@media (max-width:1024px){
+
+.main-page{
+  width:90%;
+}
+
+.filtros input,
+.filtros select{
+  width:100%;
+}
+
+.container{
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+}
+
+.gift-title{
+  font-size:42px;
+}
+
+}
+
+
+/* ============================= */
+/* MOBILE */
+/* ============================= */
+
+@media (max-width:768px){
+
+.main-page{
+  width:95%;
+}
+
+/* FILTROS */
+
+.filtros{
+  flex-direction:column;
+  gap:10px;
+}
+
+.filtros input,
+.filtros select{
+  width:100%;
+}
+
+/* GRID */
+
+.container{
+  grid-template-columns:1fr;
+  gap:20px;
+}
+
+/* CARD */
+
+.card-image img{
+  height:200px;
+}
+
+/* TÍTULOS */
+
+.titulo{
+  font-size:16px;
+}
+
+.descricao{
+  font-size:13px;
+}
+
+/* PREÇO */
+
+.preco{
+  font-size:15px;
+}
+
+/* BOTÃO */
+
+.btn-presentear{
+  padding:8px 12px;
+  font-size:13px;
+}
+
+/* INTRO PRESENTES */
+
+.gift-title{
+  font-size:34px;
+}
+
+.gift-description{
+  font-size:16px;
+}
+
+/* MODAL */
+
+.modal-content{
+  width:90%;
+  padding:20px;
+}
+
+.modal-produto{
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+
+.modal-produto img{
+  width:90px;
+  height:90px;
+}
+
+.pix-copy{
+  flex-direction:column;
+}
+
+.pix-copy button{
+  width:100%;
+}
+
+.modal-actions{
+  flex-direction:column;
+}
+
+.modal-actions button{
+  width:100%;
+}
+
+}
+
+
+/* ============================= */
+/* MOBILE PEQUENO */
+/* ============================= */
+
+@media (max-width:480px){
+
+.gift-title{
+  font-size:28px;
+}
+
+.gift-description{
+  font-size:15px;
+}
+
+.card-image img{
+  height:180px;
+}
+
+.filtro-container{
+  padding:15px;
+}
+
+.modal-content{
+  width:95%;
+}
+
 }

@@ -9,6 +9,10 @@ export default function BottomNav() {
         <FiHome />
         <span>Início</span>
       </a>
+      <a href="#localizacao" className={styles.item}>
+        <FiMapPin />
+        <span>Local</span>
+      </a>
 
       <a href="#confirmacao" className={styles.item}>
         <FiCheckCircle />
@@ -20,10 +24,7 @@ export default function BottomNav() {
         <span>Presentes</span>
       </a>
 
-      <a href="#localizacao" className={styles.item}>
-        <FiMapPin />
-        <span>Local</span>
-      </a>
+
 
     </nav>
   )

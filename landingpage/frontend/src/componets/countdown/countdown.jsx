@@ -5,87 +5,94 @@ import styles from "./countdown.module.css"
 
 export default function Countdown() {
 
-      const url =
+  const url =
     "https://calendar.google.com/calendar/render?action=TEMPLATE" +
     "&text=Casamento+Angélica+e+Gabriel" +
     "&dates=20260927T150000/20260927T230000" +
     "&details=Venha+celebrar+conosco+nosso+casamento!" +
     "&location=Cidade+Estado";
 
-    const dataCasamento = new Date("sep 27, 2026 15:00:00").getTime()
+  const dataCasamento = new Date("sep 27, 2026 15:00:00").getTime()
 
-    const [tempo, setTempo] = useState({
-        dias: 0,
-        horas: 0,
-        minutos: 0,
-        segundos: 0
-    })
+  const [tempo, setTempo] = useState({
+    dias: 0,
+    horas: 0,
+    minutos: 0,
+    segundos: 0
+  })
 
-    useEffect(() => {
+  useEffect(() => {
 
-        const interval = setInterval(() => {
+    const interval = setInterval(() => {
 
-            const agora = new Date().getTime()
-            const distancia = dataCasamento - agora
+      const agora = new Date().getTime()
+      const distancia = dataCasamento - agora
 
-            const dias = Math.floor(distancia / (1000 * 60 * 60 * 24))
-            const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-            const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60))
-            const segundos = Math.floor((distancia % (1000 * 60)) / 1000)
+      const dias = Math.floor(distancia / (1000 * 60 * 60 * 24))
+      const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60))
+      const segundos = Math.floor((distancia % (1000 * 60)) / 1000)
 
-            setTempo({
-                dias,
-                horas,
-                minutos,
-                segundos
-            })
+      setTempo({
+        dias,
+        horas,
+        minutos,
+        segundos
+      })
 
-        }, 1000)
+    }, 1000)
 
-        return () => clearInterval(interval)
+    return () => clearInterval(interval)
 
-    }, [])
+  }, [])
 
-    return (
-        <section className={styles.countdown}>
+  return (
+    <section className={styles.countdown}>
 
-            <h2 className={styles.countdownTitle}>Falta pouco!</h2>
+      <h2 className={`${styles.countdownTitle} animate fade-down`}>
+        Falta pouco!
+      </h2>
 
-            <p className={styles.countdownSubtitle}>
-                Estamos contando os dias para o nosso grande dia.
-                Cada momento que passa nos aproxima do tão esperado “sim”.
-            </p>
+      <p className={`${styles.countdownSubtitle} animate fade-up delay-1`}>
+        Estamos contando os dias para o nosso grande dia.
+        Cada momento que passa nos aproxima do tão esperado “sim”.
+      </p>
 
-            <div className={styles.countdownGrid}>
+      <div className={styles.countdownGrid}>
 
-                <div className={styles.timeBox}>
-                    <span>{tempo.dias}</span>
-                    <small>Dias</small>
-                </div>
+        <div className={`${styles.timeBox} animate zoom-in delay-1`}>
+          <span>{tempo.dias}</span>
+          <small>Dias</small>
+        </div>
 
-                <div className={styles.timeBox}>
-                    <span>{tempo.horas}</span>
-                    <small>Horas</small>
-                </div>
+        <div className={`${styles.timeBox} animate zoom-in delay-2`}>
+          <span>{tempo.horas}</span>
+          <small>Horas</small>
+        </div>
 
-                <div className={styles.timeBox}>
-                    <span>{tempo.minutos}</span>
-                    <small>Minutos</small>
-                </div>
+        <div className={`${styles.timeBox} animate zoom-in delay-3`}>
+          <span>{tempo.minutos}</span>
+          <small>Minutos</small>
+        </div>
 
-                <div className={styles.timeBox}>
-                    <span>{tempo.segundos}</span>
-                    <small>Segundos</small>
-                </div>
+        <div className={`${styles.timeBox} animate zoom-in delay-4`}>
+          <span>{tempo.segundos}</span>
+          <small>Segundos</small>
+        </div>
 
-            </div>
-            <a className={styles.button} href={url} target="_blank" rel="noopener noreferrer" >
-                <button>
-                    Adicionar à Agenda
-                </button>
-            </a>
+      </div>
 
+      <a
+        className={`${styles.button} animate fade-up delay-4`}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <button>
+          Adicionar à Agenda
+        </button>
+      </a>
 
-        </section>
-    )
+    </section>
+  )
 }

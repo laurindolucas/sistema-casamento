@@ -12,16 +12,17 @@ export default function Hero() {
         alt="Foto do casal"
         className={styles.heroImage}
       />
+      <p className={styles.topo}>
+        Com a bênção de Deus e de seus pais
+        <br />
+        <strong>Angélica e Gabriel</strong>
+        <br />
+        convidam você para o seu casamento
+      </p>
+
 
       <div className={styles.content}>
 
-        <p className={styles.topo}>
-          Com a bênção de Deus e de seus pais
-          <br />
-          <strong>Angélica e Gabriel</strong>
-          <br />
-          convidam você para o seu casamento
-        </p>
 
         <h1 className={styles.monograma}>
           A <span>&</span> G

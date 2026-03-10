@@ -50,25 +50,24 @@ export default function Confirmacao() {
 
     alert("Presença confirmada para: " + nomeSelecionado)
 
-    // depois você vai chamar sua API Flask aqui
   }
 
   return (
 
     <section className={styles.confirmacao}>
 
-      <div className={styles.card}>
+      <div className={`${styles.card} animate fade-up`}>
 
-        <h2 className={styles.titulo}>
+        <h2 className={`${styles.titulo} animate fade-down`}>
           Confirme sua Presença
         </h2>
 
-        <p className={styles.descricao}>
+        <p className={`${styles.descricao} animate fade-up delay-1`}>
           Sua presença é muito importante para nós!
           Digite seu nome e confirme sua presença em nosso casamento.
         </p>
 
-        <div className={styles.inputGroup}>
+        <div className={`${styles.inputGroup} animate fade-up delay-2`}>
 
           <input
             type="text"
@@ -93,7 +92,7 @@ export default function Confirmacao() {
 
         </div>
 
-        <div className={styles.buttons}>
+        <div className={`${styles.buttons} animate zoom-in delay-3`}>
 
           <button
             className={`${styles.confirmarBtn} ${nomeSelecionado ? styles.ativo : ""}`}
