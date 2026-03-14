@@ -8,85 +8,169 @@
 </head>
 
 <body>
-
-<h1>🎁 Dashboard Lista de Presentes</h1>
-
-<table>
-
-<thead>
-<tr>
-<th>Nome</th>
-<th>Categoria</th>
-<th>Valor</th>
-<th>Status</th>
-<th>Ações</th>
-</tr>
-</thead>
-
-<tbody id="tabelaPresentes"></tbody>
-
-</table>
-
-
-<!-- MODAL EDITAR -->
-
-<div id="modalEditar" class="modal">
-
-<div class="modal-content">
-
-<span class="fechar" onclick="fecharModal('modalEditar')">&times;</span>
-
-<h2>Editar Presente</h2>
-
-<form id="formEditar">
-
-<input type="hidden" id="edit_id">
-
-<label>Nome</label>
-<input type="text" id="edit_nome">
-
-<label>Descrição</label>
-<textarea id="edit_descricao"></textarea>
-
-<label>Valor</label>
-<input type="number" id="edit_valor">
-
-<label>Categoria</label>
-<input type="text" id="edit_categoria">
-
-<label>Tipo pagamento</label>
-<input type="text" id="edit_pagamento">
-
-<label>URL Imagem</label>
-<input type="text" id="edit_imagem">
-
-<label>Quantidade</label>
-<input type="number" id="edit_quantidade">
-
-<button type="submit">Salvar</button>
-
-</form>
-
+<header>
+  <div class="monogram">C&A</div>
+  <div class="title-block">
+    <h1>Painel Administrativo</h1>
+    <p>Gestão do Casamento</p>
+  </div>
+</header>
+ 
+<div class="tabs-bar">
+  <button class="tab-btn active" data-tab="presentes">🎁 Presentes</button>
+  <button class="tab-btn" data-tab="convidados">👥 Convidados</button>
 </div>
+ 
+<main>
+ 
+  <!-- ════ TAB PRESENTES ════ -->
+  <section class="tab-section active" id="tab-presentes">
+ 
+    <div class="section-header">
+      <h2>Lista de <em>Presentes</em></h2>
+    </div>
+ 
+    <div class="stats" id="stats-presentes">
+      <div class="stat-card"><div class="val" id="stat-total">—</div><div class="lbl">Total</div></div>
+      <div class="stat-card"><div class="val" id="stat-disp">—</div><div class="lbl">Disponíveis</div></div>
+      <div class="stat-card"><div class="val" id="stat-res">—</div><div class="lbl">Reservados</div></div>
+    </div>
+ 
+    <div class="toolbar">
+      <input type="text" id="busca-presente" placeholder="Buscar presente…">
+      <select id="filtro-categoria">
+        <option value="">Todas as categorias</option>
+      </select>
+      <select id="filtro-status">
+        <option value="">Todos</option>
+        <option value="true">Disponíveis</option>
+        <option value="false">Reservados</option>
+      </select>
+    </div>
+ 
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Presente</th>
+            <th>Categoria</th>
+            <th>Valor</th>
+            <th>Pagamento</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaPresentes"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="paginacaoPresentes"></div>
+  </section>
+ 
+  <!-- ════ TAB CONVIDADOS ════ -->
+  <section class="tab-section" id="tab-convidados">
+ 
+    <div class="section-header">
+      <h2>Lista de <em>Convidados</em></h2>
+    </div>
+ 
+    <div class="stats">
+      <div class="stat-card"><div class="val" id="stat-conv-total">—</div><div class="lbl">Total</div></div>
+      <div class="stat-card"><div class="val" id="stat-conv-conf">—</div><div class="lbl">Confirmados</div></div>
+      <div class="stat-card"><div class="val" id="stat-conv-pend">—</div><div class="lbl">Pendentes</div></div>
+    </div>
+ 
+    <div class="toolbar">
+      <input type="text" id="busca-convidado" placeholder="Buscar convidado…">
+      <select id="filtro-confirmado">
+        <option value="">Todos</option>
+        <option value="true">Confirmados</option>
+        <option value="false">Não confirmados</option>
+      </select>
+    </div>
+ 
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Status</th>
+            <th>Data de Resposta</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaConvidados"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="paginacaoConvidados"></div>
+  </section>
+ 
+</main>
+ 
+<!-- ═══ MODAL EDITAR PRESENTE ═══ -->
+<div class="modal" id="modalEditar">
+  <div class="modal-box">
+    <button class="modal-close" onclick="fecharModal('modalEditar')">×</button>
+    <h2>Editar Presente</h2>
+    <form id="formEditar" autocomplete="off">
+      <input type="hidden" id="edit_id">
+      <div class="form-grid">
+        <div class="field full">
+          <label>Nome</label>
+          <input type="text" id="edit_nome" required>
+        </div>
+        <div class="field full">
+          <label>Descrição</label>
+          <textarea id="edit_descricao"></textarea>
+        </div>
+        <div class="field">
+          <label>Valor (R$)</label>
+          <input type="number" id="edit_valor" step="0.01" min="0" required>
+        </div>
+        <div class="field">
+          <label>Quantidade</label>
+          <input type="number" id="edit_quantidade" min="1" required>
+        </div>
+        <div class="field">
+          <label>Categoria</label>
+          <input type="text" id="edit_categoria">
+        </div>
+        <div class="field">
+          <label>Tipo de Pagamento</label>
+          <input type="text" id="edit_pagamento">
+        </div>
+        <div class="field full">
+          <label>URL da Imagem</label>
+          <input type="text" id="edit_imagem">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="fecharModal('modalEditar')">Cancelar</button>
+        <button type="submit" class="btn-primary">Salvar Alterações</button>
+      </div>
+    </form>
+  </div>
 </div>
-
-
-
-<!-- MODAL INFO -->
-
-<div id="modalInfo" class="modal">
-
-<div class="modal-content">
-
-<span class="fechar" onclick="fecharModal('modalInfo')">&times;</span>
-
-<h2>Informações da Reserva</h2>
-
-<div id="infoReserva"></div>
-
+ 
+<!-- ═══ MODAL INFO RESERVA ═══ -->
+<div class="modal" id="modalInfo">
+  <div class="modal-box">
+    <button class="modal-close" onclick="fecharModal('modalInfo')">×</button>
+    <h2>Informações da Reserva</h2>
+    <div id="infoReserva"></div>
+  </div>
 </div>
+ 
+<!-- ═══ MODAL INFO CONVIDADO ═══ -->
+<div class="modal" id="modalConvidado">
+  <div class="modal-box">
+    <button class="modal-close" onclick="fecharModal('modalConvidado')">×</button>
+    <h2>Detalhes do Convidado</h2>
+    <div id="infoConvidado"></div>
+  </div>
 </div>
-
+ 
+<div id="toast"></div>
+ 
 <script src="script.js"></script>
 
 </body>
