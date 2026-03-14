@@ -7,6 +7,58 @@ Base URL local: `http://localhost:5000`
 ### `GET /api/health`
 Retorna status da API.
 
+## Confirmações
+
+### `GET /api/confirmacoes`
+Lista confirmações de presença registradas.
+
+Query params opcionais:
+- `page` (default: 1)
+- `limit` (default: 12, max: 100)
+- `confirmado` (filtra apenas confirmados ou não; aceita true/false, sim/nao, 1/0)
+- `busca` (filtro por nome do convidado)
+
+Resposta:
+```json
+{
+  "data": [
+    {
+      "id": 10,
+      "nome_convidado": "Maria Silva",
+      "confirmado": true,
+      "criado_em": "2026-03-10T..."
+    }
+  ],
+  "page": 1,
+  "limit": 12,
+  "count": 1
+}
+```
+
+### `GET /api/confirmacoes/:id`
+Retorna os dados de uma confirmação específica.
+
+### `POST /api/confirmacoes`
+Cria uma nova confirmação.
+
+Body JSON:
+```json
+{
+  "nome_convidado": "Maria Silva",
+  "confirmado": true
+}
+```
+
+### `PATCH /api/confirmacoes/:id`
+Atualiza nome e/ou status de confirmação.
+
+Body JSON de exemplo:
+```json
+{
+  "confirmado": false
+}
+```
+
 ## Presentes
 
 ### `GET /api/presentes`

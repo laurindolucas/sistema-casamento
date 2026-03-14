@@ -3,6 +3,12 @@
 from flask import Blueprint, request
 
 from app.schemas import validate_presente_payload
+from app.services.confirmacoes_service import (
+    create_confirmacao,
+    get_confirmacao,
+    list_confirmacoes,
+    update_confirmacao,
+)
 from app.services.presentes_service import (
     create_presente,
     delete_presente,
@@ -19,6 +25,79 @@ api_bp = Blueprint("api", __name__, url_prefix="/api")
 @api_bp.route("/health", methods=["GET"])
 def health():
     return api_response({"ok": True, "service": "lista-de-presentes-api"})
+
+
+@api_bp.route("/confirmacoes", methods=["GET"])
+def listar_confirmacoes_api():
+    page = parse_int(request.args.get("page"), default=1, min_value=1)
+    limit = parse_int(request.args.get("limit"), default=12, min_value=1, max_value=100)
+
+    confirmado_param = request.args.get("confirmado")
+    confirmado = parse_bool(confirmado_param, default=False) if confirmado_param is not None else None
+    busca = request.args.get("busca")
+
+    rows = list_confirmacoes(
+        page=page,
+        limit=limit,
+        confirmado=confirmado,
+        busca=busca,
+    )
+    confirmacoes = [serialize_row(row) for row in rows]
+
+    return api_response({
+        "data": confirmacoes,
+        "page": page,
+        "limit": limit,
+        "count": len(confirmacoes),
+    })
+
+
+@api_bp.route("/confirmacoes/<int:confirmacao_id>", methods=["GET"])
+def detalhe_confirmacao(confirmacao_id):
+    row = get_confirmacao(confirmacao_id)
+    if not row:
+        return api_response({"error": "Confirmacao nao encontrada"}, status=404)
+    return api_response({"data": serialize_row(row)})
+
+
+@api_bp.route("/confirmacoes", methods=["POST"])
+def criar_confirmacao_api():
+    payload = request.get_json(silent=True) or {}
+    nome_convidado = str(payload.get("nome_convidado", "")).strip()
+    if not nome_convidado:
+        return api_response({"error": "nome_convidado e obrigatorio"}, status=400)
+
+    confirmado = parse_bool(payload.get("confirmado"), default=False)
+
+    row = create_confirmacao(nome_convidado, confirmado)
+    return api_response(
+        {
+            "message": "Confirmacao registrada",
+            "data": serialize_row(row),
+        },
+        status=201,
+    )
+
+
+@api_bp.route("/confirmacoes/<int:confirmacao_id>", methods=["PATCH"])
+def atualizar_confirmacao_api(confirmacao_id):
+    payload = request.get_json(silent=True) or {}
+
+    nome_value = payload.get("nome_convidado")
+    nome_convidado = str(nome_value).strip() if nome_value is not None else None
+
+    confirmado = None
+    if "confirmado" in payload:
+        confirmado = parse_bool(payload.get("confirmado"), default=False)
+
+    if nome_convidado is None and confirmado is None:
+        return api_response({"error": "Nenhum campo valido para atualizar"}, status=400)
+
+    row = update_confirmacao(confirmacao_id, nome_convidado=nome_convidado, confirmado=confirmado)
+    if not row:
+        return api_response({"error": "Confirmacao nao encontrada"}, status=404)
+
+    return api_response({"message": "Confirmacao atualizada", "data": serialize_row(row)})
 
 
 @api_bp.route("/presentes", methods=["GET"])

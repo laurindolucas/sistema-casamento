@@ -37,6 +37,14 @@ def ensure_schema():
         );
         """,
         """
+        CREATE TABLE IF NOT EXISTS confirmacoes (
+            id BIGSERIAL PRIMARY KEY,
+            nome_convidado TEXT NOT NULL,
+            confirmado BOOLEAN NOT NULL DEFAULT FALSE,
+            criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+        """,
+        """
         CREATE UNIQUE INDEX IF NOT EXISTS reservas_presentes_unica_ativa
             ON reservas_presentes (presente_id)
             WHERE status = 'ativa';
