@@ -61,6 +61,12 @@ function fmtData(iso) {
   return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })
 }
 
+// Desempacota resposta da API — endpoints de detalhe retornam { data: {...} }
+// endpoints de lista retornam { data: [...], page, limit, count }
+function unwrap(json) {
+  return json?.data ?? json
+}
+
 function renderPaginacao(containerId, currentPage, total, limit, onPage) {
   const totalPages = Math.ceil(total / limit) || 1
   const el = document.getElementById(containerId)
@@ -113,27 +119,29 @@ async function carregarPresentes() {
   if (categoria)     params.set("categoria", categoria)
   if (status !== "") params.set("somente_disponiveis", status)
 
-  let dados
+  let json
   try {
     const res = await fetch(`${API_PRESENTES}?${params}`)
     if (!res.ok) throw new Error(res.status)
-    dados = await res.json()
+    json = await res.json()
   } catch {
     tabelaVazia("tabelaPresentes", 6, "Erro ao conectar com a API.")
     return
   }
 
-  const lista = dados.data || []
-  atualizarStatsPresentes(lista, dados.count)
+  // Lista retorna { data: [...], count: N }
+  const lista = json.data || []
+  const total = json.count ?? lista.length
+
+  atualizarStatsPresentes(lista, total)
   popularCategorias(lista)
   renderTabelaPresentes(lista)
-  renderPaginacao("paginacaoPresentes", page, dados.count, limit, p => {
+  renderPaginacao("paginacaoPresentes", page, total, limit, p => {
     state.presentes.page = p
     carregarPresentes()
   })
 }
 
-// ── Stats (sem valor total) ──
 function atualizarStatsPresentes(lista, total) {
   const disponiveis = lista.filter(p => p.disponivel).length
   const reservados  = lista.filter(p => !p.disponivel).length
@@ -142,7 +150,6 @@ function atualizarStatsPresentes(lista, total) {
   document.getElementById("stat-res").textContent   = reservados
 }
 
-// ── Popular select de categorias ──
 function popularCategorias(lista) {
   const sel = document.getElementById("filtro-categoria")
   const atual = sel.value
@@ -157,7 +164,6 @@ function popularCategorias(lista) {
   })
 }
 
-// ── Renderizar tabela ──
 function renderTabelaPresentes(lista) {
   const tbody = document.getElementById("tabelaPresentes")
 
@@ -197,6 +203,7 @@ function renderTabelaPresentes(lista) {
 
 // ══════════════════════════════════════════
 //  MODAL INFO RESERVA
+//  GET /api/presentes/:id → { data: { ...presente, reservado_por: {...} } }
 // ══════════════════════════════════════════
 async function verInfoReserva(id) {
   const div = document.getElementById("infoReserva")
@@ -204,8 +211,10 @@ async function verInfoReserva(id) {
   abrirModal("modalInfo")
 
   try {
-    const res = await fetch(`${API_PRESENTES}/${id}`)
-    const p   = await res.json()
+    const res  = await fetch(`${API_PRESENTES}/${id}`)
+    if (!res.ok) throw new Error(res.status)
+    const json = await res.json()
+    const p    = unwrap(json)   // { ...presente, reservado_por: null | {...} }
 
     if (!p.reservado_por) {
       div.innerHTML = `<div class="empty-info">Este presente ainda não foi reservado.</div>`
@@ -240,12 +249,15 @@ async function verInfoReserva(id) {
 }
 
 // ══════════════════════════════════════════
-//  MODAL EDITAR PRESENTE (pré-preenchido)
+//  MODAL EDITAR PRESENTE
+//  GET /api/presentes/:id → { data: { ...presente } }
 // ══════════════════════════════════════════
 async function abrirEditar(id) {
   try {
-    const res = await fetch(`${API_PRESENTES}/${id}`)
-    const p   = await res.json()
+    const res  = await fetch(`${API_PRESENTES}/${id}`)
+    if (!res.ok) throw new Error(res.status)
+    const json = await res.json()
+    const p    = unwrap(json)   // desempacota o { data: {...} }
 
     document.getElementById("edit_id").value         = p.id
     document.getElementById("edit_nome").value       = p.nome_presente    || ""
@@ -301,7 +313,6 @@ async function excluirPresente(id) {
     const res = await fetch(`${API_PRESENTES}/${id}`, { method: "DELETE" })
     if (!res.ok) throw new Error()
     toast("🗑️ Presente excluído.")
-    // Se era o último item da página atual, volta uma página
     const linhas = document.querySelectorAll("#tabelaPresentes tr:not(.state-row)").length
     if (linhas === 1 && state.presentes.page > 1) state.presentes.page--
     carregarPresentes()
@@ -346,20 +357,23 @@ async function carregarConvidados() {
   if (busca)             params.set("busca", busca)
   if (confirmado !== "") params.set("confirmado", confirmado)
 
-  let dados
+  let json
   try {
     const res = await fetch(`${API_CONFIRMACOES}?${params}`)
     if (!res.ok) throw new Error(res.status)
-    dados = await res.json()
+    json = await res.json()
   } catch {
     tabelaVazia("tabelaConvidados", 4, "Erro ao conectar com a API.")
     return
   }
 
-  const lista = dados.data || []
-  atualizarStatsConvidados(lista, dados.count)
+  // Lista retorna { data: [...], count: N }
+  const lista = json.data || []
+  const total = json.count ?? lista.length
+
+  atualizarStatsConvidados(lista, total)
   renderTabelaConvidados(lista)
-  renderPaginacao("paginacaoConvidados", page, dados.count, limit, p => {
+  renderPaginacao("paginacaoConvidados", page, total, limit, p => {
     state.convidados.page = p
     carregarConvidados()
   })
@@ -407,6 +421,7 @@ function renderTabelaConvidados(lista) {
 
 // ══════════════════════════════════════════
 //  MODAL INFO CONVIDADO
+//  GET /api/confirmacoes/:id → { data: { ...confirmacao } }
 // ══════════════════════════════════════════
 async function verInfoConvidado(id) {
   const div = document.getElementById("infoConvidado")
@@ -414,8 +429,10 @@ async function verInfoConvidado(id) {
   abrirModal("modalConvidado")
 
   try {
-    const res = await fetch(`${API_CONFIRMACOES}/${id}`)
-    const c   = await res.json()
+    const res  = await fetch(`${API_CONFIRMACOES}/${id}`)
+    if (!res.ok) throw new Error(res.status)
+    const json = await res.json()
+    const c    = unwrap(json)   // desempacota o { data: {...} }
 
     const badge = c.confirmado
       ? `<span class="badge badge-confirmado">Confirmado</span>`
