@@ -98,3 +98,14 @@ def update_confirmacao(confirmacao_id, nome_convidado=None, confirmado=None):
             params,
         )
         return cur.fetchone()
+def delete_confirmacao(confirmacao_id):
+    with db_cursor(commit=True) as cur:
+        cur.execute(
+            """
+            DELETE FROM confirmacoes
+            WHERE id = %s
+            RETURNING id, nome_convidado, confirmado, criado_em;
+            """,
+            (confirmacao_id,),
+        )
+        return cur.fetchone()

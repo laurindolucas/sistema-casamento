@@ -6,6 +6,7 @@ from app.schemas import validate_presente_payload
 from app.services.confirmacoes_service import (
     create_confirmacao,
     get_confirmacao,
+    delete_confirmacao,
     list_confirmacoes,
     update_confirmacao,
 )
@@ -99,6 +100,12 @@ def atualizar_confirmacao_api(confirmacao_id):
 
     return api_response({"message": "Confirmacao atualizada", "data": serialize_row(row)})
 
+@api_bp.route("/confirmacoes/<int:confirmacao_id>", methods=["DELETE"])
+def deletar_confirmacao(confirmacao_id):
+    row = delete_confirmacao(confirmacao_id)
+    if not row:
+        return api_response({"error": "Confirmacao nao encontrada"}, status=404)
+    return api_response({"message": "Confirmacao removida", "id": row["id"]})
 
 @api_bp.route("/presentes", methods=["GET"])
 def listar_presentes_api():

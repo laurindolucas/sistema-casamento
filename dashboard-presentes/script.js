@@ -61,10 +61,13 @@ function fmtData(iso) {
   return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })
 }
 
-// Desempacota resposta da API — endpoints de detalhe retornam { data: {...} }
-// endpoints de lista retornam { data: [...], page, limit, count }
+// Endpoints de detalhe retornam { data: {...} }; listas retornam { data: [...] }
 function unwrap(json) {
   return json?.data ?? json
+}
+
+function resetForm(formId) {
+  document.getElementById(formId).reset()
 }
 
 function renderPaginacao(containerId, currentPage, total, limit, onPage) {
@@ -98,13 +101,13 @@ function renderPaginacao(containerId, currentPage, total, limit, onPage) {
 }
 
 function tabelaCarregando(tbodyId, cols) {
-  const tbody = document.getElementById(tbodyId)
-  tbody.innerHTML = `<tr class="state-row"><td colspan="${cols}"><span class="spinner"></span>Carregando…</td></tr>`
+  document.getElementById(tbodyId).innerHTML =
+    `<tr class="state-row"><td colspan="${cols}"><span class="spinner"></span>Carregando…</td></tr>`
 }
 
 function tabelaVazia(tbodyId, cols, msg = "Nenhum item encontrado.") {
-  const tbody = document.getElementById(tbodyId)
-  tbody.innerHTML = `<tr class="state-row"><td colspan="${cols}">${msg}</td></tr>`
+  document.getElementById(tbodyId).innerHTML =
+    `<tr class="state-row"><td colspan="${cols}">${msg}</td></tr>`
 }
 
 // ══════════════════════════════════════════
@@ -129,7 +132,6 @@ async function carregarPresentes() {
     return
   }
 
-  // Lista retorna { data: [...], count: N }
   const lista = json.data || []
   const total = json.count ?? lista.length
 
@@ -193,6 +195,9 @@ function renderTabelaPresentes(lista) {
         <div class="actions">
           <button class="btn-icon" onclick="verInfoReserva(${p.id})">🔍 Info</button>
           <button class="btn-icon" onclick="abrirEditar(${p.id})">✏️ Editar</button>
+          ${!p.disponivel
+            ? `<button class="btn-icon warning" onclick="cancelarReserva(${p.id})">🔓 Liberar</button>`
+            : ""}
           <button class="btn-icon danger" onclick="excluirPresente(${p.id})">🗑️ Excluir</button>
         </div>
       </td>
@@ -202,8 +207,52 @@ function renderTabelaPresentes(lista) {
 }
 
 // ══════════════════════════════════════════
+//  NOVO PRESENTE — POST /api/presentes
+// ══════════════════════════════════════════
+document.getElementById("formNovoPresente").addEventListener("submit", async function (e) {
+  e.preventDefault()
+  const btn = this.querySelector("button[type=submit]")
+  btn.disabled = true
+  btn.textContent = "Salvando…"
+
+  const pagamento = document.getElementById("novo_pagamento").value
+
+  const body = {
+    nome_presente:    document.getElementById("novo_nome").value.trim(),
+    descricao:        document.getElementById("novo_descricao").value.trim(),
+    valor:            parseFloat(document.getElementById("novo_valor").value),
+    categoria:        document.getElementById("novo_categoria").value.trim() || "outros",
+    tipo_pagamento:   pagamento || null,
+    url_image:        document.getElementById("novo_imagem").value.trim() || null,
+    quantidade_total: parseInt(document.getElementById("novo_quantidade").value) || 1,
+    ativo:            true,
+  }
+
+  try {
+    const res = await fetch(API_PRESENTES, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      throw new Error(err.error || res.status)
+    }
+    fecharModal("modalNovoPresente")
+    resetForm("formNovoPresente")
+    toast("🎁 Presente adicionado com sucesso!")
+    state.presentes.page = 1
+    carregarPresentes()
+  } catch (err) {
+    toast(`❌ Erro: ${err.message}`)
+  } finally {
+    btn.disabled = false
+    btn.textContent = "Adicionar Presente"
+  }
+})
+
+// ══════════════════════════════════════════
 //  MODAL INFO RESERVA
-//  GET /api/presentes/:id → { data: { ...presente, reservado_por: {...} } }
 // ══════════════════════════════════════════
 async function verInfoReserva(id) {
   const div = document.getElementById("infoReserva")
@@ -213,8 +262,7 @@ async function verInfoReserva(id) {
   try {
     const res  = await fetch(`${API_PRESENTES}/${id}`)
     if (!res.ok) throw new Error(res.status)
-    const json = await res.json()
-    const p    = unwrap(json)   // { ...presente, reservado_por: null | {...} }
+    const p = unwrap(await res.json())
 
     if (!p.reservado_por) {
       div.innerHTML = `<div class="empty-info">Este presente ainda não foi reservado.</div>`
@@ -250,14 +298,12 @@ async function verInfoReserva(id) {
 
 // ══════════════════════════════════════════
 //  MODAL EDITAR PRESENTE
-//  GET /api/presentes/:id → { data: { ...presente } }
 // ══════════════════════════════════════════
 async function abrirEditar(id) {
   try {
-    const res  = await fetch(`${API_PRESENTES}/${id}`)
+    const res = await fetch(`${API_PRESENTES}/${id}`)
     if (!res.ok) throw new Error(res.status)
-    const json = await res.json()
-    const p    = unwrap(json)   // desempacota o { data: {...} }
+    const p = unwrap(await res.json())
 
     document.getElementById("edit_id").value         = p.id
     document.getElementById("edit_nome").value       = p.nome_presente    || ""
@@ -276,15 +322,18 @@ async function abrirEditar(id) {
 
 document.getElementById("formEditar").addEventListener("submit", async function (e) {
   e.preventDefault()
-  const id = document.getElementById("edit_id").value
+  const btn = this.querySelector("button[type=submit]")
+  btn.disabled = true
+  btn.textContent = "Salvando…"
 
+  const id = document.getElementById("edit_id").value
   const body = {
     nome_presente:    document.getElementById("edit_nome").value,
     descricao:        document.getElementById("edit_descricao").value,
     valor:            parseFloat(document.getElementById("edit_valor").value),
     categoria:        document.getElementById("edit_categoria").value,
-    tipo_pagamento:   document.getElementById("edit_pagamento").value,
-    url_image:        document.getElementById("edit_imagem").value,
+    tipo_pagamento:   document.getElementById("edit_pagamento").value || null,
+    url_image:        document.getElementById("edit_imagem").value || null,
     quantidade_total: parseInt(document.getElementById("edit_quantidade").value),
   }
 
@@ -300,8 +349,35 @@ document.getElementById("formEditar").addEventListener("submit", async function 
     carregarPresentes()
   } catch {
     toast("❌ Erro ao salvar alterações.")
+  } finally {
+    btn.disabled = false
+    btn.textContent = "Salvar Alterações"
   }
 })
+
+// ══════════════════════════════════════════
+//  CANCELAR RESERVA (libera o presente)
+//  POST /api/presentes/:id/cancelar-reserva
+// ══════════════════════════════════════════
+async function cancelarReserva(id) {
+  if (!confirm("Deseja cancelar a reserva e liberar este presente?")) return
+
+  try {
+    const res = await fetch(`${API_PRESENTES}/${id}/cancelar-reserva`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      throw new Error(err.error || res.status)
+    }
+    toast("🔓 Reserva cancelada. Presente disponível novamente.")
+    carregarPresentes()
+  } catch (err) {
+    toast(`❌ Erro: ${err.message}`)
+  }
+}
 
 // ══════════════════════════════════════════
 //  EXCLUIR PRESENTE
@@ -367,7 +443,6 @@ async function carregarConvidados() {
     return
   }
 
-  // Lista retorna { data: [...], count: N }
   const lista = json.data || []
   const total = json.count ?? lista.length
 
@@ -412,6 +487,7 @@ function renderTabelaConvidados(lista) {
           <button class="btn-icon" onclick="alternarConfirmacao(${c.id}, ${!c.confirmado})">
             ${c.confirmado ? "↩️ Desfazer" : "✅ Confirmar"}
           </button>
+          <button class="btn-icon danger" onclick="excluirConvidado(${c.id})">🗑️ Excluir</button>
         </div>
       </td>
     `
@@ -420,8 +496,49 @@ function renderTabelaConvidados(lista) {
 }
 
 // ══════════════════════════════════════════
+//  NOVO CONVIDADO — POST /api/confirmacoes
+// ══════════════════════════════════════════
+document.getElementById("formNovoConvidado").addEventListener("submit", async function (e) {
+  e.preventDefault()
+  const btn = this.querySelector("button[type=submit]")
+  btn.disabled = true
+  btn.textContent = "Salvando…"
+
+  const nome = document.getElementById("novo_conv_nome").value.trim()
+  const confirmado = document.getElementById("novo_conv_confirmado").value === "true"
+
+  if (!nome) {
+    toast("❌ Informe o nome do convidado.")
+    btn.disabled = false
+    btn.textContent = "Adicionar Convidado"
+    return
+  }
+
+  try {
+    const res = await fetch(API_CONFIRMACOES, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome_convidado: nome, confirmado }),
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      throw new Error(err.error || res.status)
+    }
+    fecharModal("modalNovoConvidado")
+    resetForm("formNovoConvidado")
+    toast("👥 Convidado adicionado com sucesso!")
+    state.convidados.page = 1
+    carregarConvidados()
+  } catch (err) {
+    toast(`❌ Erro: ${err.message}`)
+  } finally {
+    btn.disabled = false
+    btn.textContent = "Adicionar Convidado"
+  }
+})
+
+// ══════════════════════════════════════════
 //  MODAL INFO CONVIDADO
-//  GET /api/confirmacoes/:id → { data: { ...confirmacao } }
 // ══════════════════════════════════════════
 async function verInfoConvidado(id) {
   const div = document.getElementById("infoConvidado")
@@ -429,10 +546,9 @@ async function verInfoConvidado(id) {
   abrirModal("modalConvidado")
 
   try {
-    const res  = await fetch(`${API_CONFIRMACOES}/${id}`)
+    const res = await fetch(`${API_CONFIRMACOES}/${id}`)
     if (!res.ok) throw new Error(res.status)
-    const json = await res.json()
-    const c    = unwrap(json)   // desempacota o { data: {...} }
+    const c = unwrap(await res.json())
 
     const badge = c.confirmado
       ? `<span class="badge badge-confirmado">Confirmado</span>`
@@ -460,6 +576,24 @@ async function verInfoConvidado(id) {
     `
   } catch {
     div.innerHTML = `<div class="empty-info">Erro ao carregar informações.</div>`
+  }
+}
+
+// ══════════════════════════════════════════
+//  EXCLUIR CONVIDADO
+// ══════════════════════════════════════════
+async function excluirConvidado(id) {
+  if (!confirm("Deseja realmente excluir este convidado?")) return
+
+  try {
+    const res = await fetch(`${API_CONFIRMACOES}/${id}`, { method: "DELETE" })
+    if (!res.ok) throw new Error()
+    toast("🗑️ Convidado excluído.")
+    const linhas = document.querySelectorAll("#tabelaConvidados tr:not(.state-row)").length
+    if (linhas === 1 && state.convidados.page > 1) state.convidados.page--
+    carregarConvidados()
+  } catch {
+    toast("❌ Erro ao excluir convidado.")
   }
 }
 

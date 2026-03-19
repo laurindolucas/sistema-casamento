@@ -8,34 +8,39 @@
 </head>
 
 <body>
-<header>
-  <div class="monogram">C&A</div>
-  <div class="title-block">
-    <h1>Painel Administrativo</h1>
-    <p>Gestão do Casamento</p>
-  </div>
-</header>
- 
-<div class="tabs-bar">
-  <button class="tab-btn active" data-tab="presentes">🎁 Presentes</button>
-  <button class="tab-btn" data-tab="convidados">👥 Convidados</button>
+<div class="header-outer">
+  <header>
+    <div class="monogram">G&A</div>
+    <div class="title-block">
+      <h1>Painel Administrativo</h1>
+      <p>Gestão do Casamento</p>
+    </div>
+  </header>
 </div>
- 
+
+<div class="tabs-outer">
+  <div class="tabs-bar">
+    <button class="tab-btn active" data-tab="presentes">🎁 Presentes</button>
+    <button class="tab-btn" data-tab="convidados">👥 Convidados</button>
+  </div>
+</div>
+
 <main>
- 
+
   <!-- ════ TAB PRESENTES ════ -->
   <section class="tab-section active" id="tab-presentes">
- 
+
     <div class="section-header">
       <h2>Lista de <em>Presentes</em></h2>
+      <button class="btn-add" onclick="abrirModal('modalNovoPresente')">+ Novo Presente</button>
     </div>
- 
+
     <div class="stats" id="stats-presentes">
       <div class="stat-card"><div class="val" id="stat-total">—</div><div class="lbl">Total</div></div>
       <div class="stat-card"><div class="val" id="stat-disp">—</div><div class="lbl">Disponíveis</div></div>
       <div class="stat-card"><div class="val" id="stat-res">—</div><div class="lbl">Reservados</div></div>
     </div>
- 
+
     <div class="toolbar">
       <input type="text" id="busca-presente" placeholder="Buscar presente…">
       <select id="filtro-categoria">
@@ -47,7 +52,7 @@
         <option value="false">Reservados</option>
       </select>
     </div>
- 
+
     <div class="table-wrap">
       <table>
         <thead>
@@ -65,20 +70,21 @@
     </div>
     <div class="pagination" id="paginacaoPresentes"></div>
   </section>
- 
+
   <!-- ════ TAB CONVIDADOS ════ -->
   <section class="tab-section" id="tab-convidados">
- 
+
     <div class="section-header">
       <h2>Lista de <em>Convidados</em></h2>
+      <button class="btn-add" onclick="abrirModal('modalNovoConvidado')">+ Novo Convidado</button>
     </div>
- 
+
     <div class="stats">
       <div class="stat-card"><div class="val" id="stat-conv-total">—</div><div class="lbl">Total</div></div>
       <div class="stat-card"><div class="val" id="stat-conv-conf">—</div><div class="lbl">Confirmados</div></div>
       <div class="stat-card"><div class="val" id="stat-conv-pend">—</div><div class="lbl">Pendentes</div></div>
     </div>
- 
+
     <div class="toolbar">
       <input type="text" id="busca-convidado" placeholder="Buscar convidado…">
       <select id="filtro-confirmado">
@@ -87,7 +93,7 @@
         <option value="false">Não confirmados</option>
       </select>
     </div>
- 
+
     <div class="table-wrap">
       <table>
         <thead>
@@ -103,9 +109,9 @@
     </div>
     <div class="pagination" id="paginacaoConvidados"></div>
   </section>
- 
+
 </main>
- 
+
 <!-- ═══ MODAL EDITAR PRESENTE ═══ -->
 <div class="modal" id="modalEditar">
   <div class="modal-box">
@@ -136,7 +142,11 @@
         </div>
         <div class="field">
           <label>Tipo de Pagamento</label>
-          <input type="text" id="edit_pagamento">
+          <select id="edit_pagamento">
+            <option value="">Selecione</option>
+            <option value="pix">PIX</option>
+            <option value="cartao">Cartão</option>
+          </select>
         </div>
         <div class="field full">
           <label>URL da Imagem</label>
@@ -150,7 +160,55 @@
     </form>
   </div>
 </div>
- 
+
+<!-- ═══ MODAL NOVO PRESENTE ═══ -->
+<div class="modal" id="modalNovoPresente">
+  <div class="modal-box">
+    <button class="modal-close" onclick="fecharModal('modalNovoPresente')">×</button>
+    <h2>Novo Presente</h2>
+    <form id="formNovoPresente" autocomplete="off">
+      <div class="form-grid">
+        <div class="field full">
+          <label>Nome <span class="obrig">*</span></label>
+          <input type="text" id="novo_nome" required>
+        </div>
+        <div class="field full">
+          <label>Descrição</label>
+          <textarea id="novo_descricao"></textarea>
+        </div>
+        <div class="field">
+          <label>Valor (R$) <span class="obrig">*</span></label>
+          <input type="number" id="novo_valor" step="0.01" min="0" required>
+        </div>
+        <div class="field">
+          <label>Quantidade</label>
+          <input type="number" id="novo_quantidade" min="1" value="1">
+        </div>
+        <div class="field">
+          <label>Categoria</label>
+          <input type="text" id="novo_categoria" placeholder="ex: cozinha, quarto…">
+        </div>
+        <div class="field">
+          <label>Tipo de Pagamento</label>
+          <select id="novo_pagamento">
+            <option value="">Selecione</option>
+            <option value="pix">PIX</option>
+            <option value="cartao">Cartão</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>URL da Imagem</label>
+          <input type="text" id="novo_imagem" placeholder="https://…">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="fecharModal('modalNovoPresente')">Cancelar</button>
+        <button type="submit" class="btn-primary">Adicionar Presente</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- ═══ MODAL INFO RESERVA ═══ -->
 <div class="modal" id="modalInfo">
   <div class="modal-box">
@@ -159,7 +217,7 @@
     <div id="infoReserva"></div>
   </div>
 </div>
- 
+
 <!-- ═══ MODAL INFO CONVIDADO ═══ -->
 <div class="modal" id="modalConvidado">
   <div class="modal-box">
@@ -168,9 +226,36 @@
     <div id="infoConvidado"></div>
   </div>
 </div>
- 
+
+<!-- ═══ MODAL NOVO CONVIDADO ═══ -->
+<div class="modal" id="modalNovoConvidado">
+  <div class="modal-box">
+    <button class="modal-close" onclick="fecharModal('modalNovoConvidado')">×</button>
+    <h2>Novo Convidado</h2>
+    <form id="formNovoConvidado" autocomplete="off">
+      <div class="form-grid">
+        <div class="field full">
+          <label>Nome do Convidado <span class="obrig">*</span></label>
+          <input type="text" id="novo_conv_nome" required>
+        </div>
+        <div class="field full">
+          <label>Confirmação de Presença</label>
+          <select id="novo_conv_confirmado">
+            <option value="false">Pendente</option>
+            <option value="true">Confirmado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="fecharModal('modalNovoConvidado')">Cancelar</button>
+        <button type="submit" class="btn-primary">Adicionar Convidado</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div id="toast"></div>
- 
+
 <script src="script.js"></script>
 
 </body>
