@@ -100,7 +100,7 @@
           <tr>
             <th>Nome</th>
             <th>Status</th>
-            <th>Data de Resposta</th>
+            <th>Data de Registro</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -149,8 +149,20 @@
           </select>
         </div>
         <div class="field full">
-          <label>URL da Imagem</label>
-          <input type="text" id="edit_imagem">
+          <label>Imagem</label>
+          <div class="upload-area" id="edit_upload_area" onclick="document.getElementById('edit_file').click()">
+            <img id="edit_preview" class="upload-preview" style="display:none">
+            <div id="edit_upload_placeholder" class="upload-placeholder">
+              <span class="upload-icon">🖼️</span>
+              <span>Clique para escolher ou arraste uma imagem</span>
+              <span class="upload-sub">PNG, JPG, WEBP até 5MB</span>
+            </div>
+            <div id="edit_upload_loading" class="upload-loading" style="display:none">
+              <span class="spinner"></span> Enviando imagem…
+            </div>
+          </div>
+          <input type="file" id="edit_file" accept="image/*" style="display:none" onchange="handleImageUpload('edit')">
+          <input type="text" id="edit_imagem" placeholder="ou cole uma URL aqui" style="margin-top:8px" oninput="syncUrlPreview('edit')">
         </div>
       </div>
       <div class="form-actions">
@@ -197,8 +209,20 @@
           </select>
         </div>
         <div class="field full">
-          <label>URL da Imagem</label>
-          <input type="text" id="novo_imagem" placeholder="https://…">
+          <label>Imagem</label>
+          <div class="upload-area" id="novo_upload_area" onclick="document.getElementById('novo_file').click()">
+            <img id="novo_preview" class="upload-preview" style="display:none">
+            <div id="novo_upload_placeholder" class="upload-placeholder">
+              <span class="upload-icon">🖼️</span>
+              <span>Clique para escolher ou arraste uma imagem</span>
+              <span class="upload-sub">PNG, JPG, WEBP até 5MB</span>
+            </div>
+            <div id="novo_upload_loading" class="upload-loading" style="display:none">
+              <span class="spinner"></span> Enviando imagem…
+            </div>
+          </div>
+          <input type="file" id="novo_file" accept="image/*" style="display:none" onchange="handleImageUpload('novo')">
+          <input type="text" id="novo_imagem" placeholder="ou cole uma URL aqui" style="margin-top:8px" oninput="syncUrlPreview('novo')">
         </div>
       </div>
       <div class="form-actions">

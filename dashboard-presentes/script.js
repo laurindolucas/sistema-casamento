@@ -3,6 +3,54 @@ const API_PRESENTES = `${API_BASE}/presentes`
 const API_CONFIRMACOES = `${API_BASE}/confirmacoes`
 
 // ══════════════════════════════════════════
+//  SUPABASE STORAGE
+// ══════════════════════════════════════════
+const SUPABASE_URL    = "https://ykarsdzejkpmvzhnyuwe.supabase.co"
+const SUPABASE_KEY    = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrYXJzZHplamtwbXZ6aG55dXdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NjMxMDgsImV4cCI6MjA4ODAzOTEwOH0.IKeWI53jG4aGuOFztlrKLuYjQ6N7llyELTGpevbiXtg"
+const SUPABASE_BUCKET = "presentes-imagens"
+
+async function uploadImagemSupabase(file) {
+  const ext = file.name.split(".").pop().toLowerCase()
+
+  const mimeMap = {
+    jpg:  "image/jpeg",
+    jpeg: "image/jpeg",
+    png:  "image/png",
+    webp: "image/webp",
+    gif:  "image/gif",
+  }
+  const contentType = mimeMap[ext] || file.type || "application/octet-stream"
+
+  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+
+  console.log("Iniciando upload:", fileName, contentType)
+
+  const res = await fetch(
+    `${SUPABASE_URL}/storage/v1/object/${SUPABASE_BUCKET}/${fileName}`,
+    {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "apikey": SUPABASE_KEY,
+        "Content-Type": contentType,
+        "x-upsert": "true",
+      },
+      body: file,
+    }
+  )
+
+  console.log("Status:", res.status)
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}))
+    console.error("SUPABASE RESPONSE:", JSON.stringify(err))
+    throw new Error(err.error || err.message || `HTTP ${res.status}`)
+  }
+
+  return `${SUPABASE_URL}/storage/v1/object/public/${SUPABASE_BUCKET}/${fileName}`
+}
+
+// ══════════════════════════════════════════
 //  ESTADO GLOBAL
 // ══════════════════════════════════════════
 const state = {
@@ -28,6 +76,8 @@ function abrirModal(id) {
 }
 function fecharModal(id) {
   document.getElementById(id).classList.remove("open")
+  if (id === "modalNovoPresente") resetUpload("novo")
+  if (id === "modalEditar")       resetUpload("edit")
 }
 
 window.addEventListener("click", e => {
@@ -61,7 +111,6 @@ function fmtData(iso) {
   return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })
 }
 
-// Endpoints de detalhe retornam { data: {...} }; listas retornam { data: [...] }
 function unwrap(json) {
   return json?.data ?? json
 }
@@ -74,7 +123,6 @@ function renderPaginacao(containerId, currentPage, total, limit, onPage) {
   const totalPages = Math.ceil(total / limit) || 1
   const el = document.getElementById(containerId)
   el.innerHTML = ""
-
   if (totalPages <= 1) return
 
   const prev = document.createElement("button")
@@ -109,6 +157,98 @@ function tabelaVazia(tbodyId, cols, msg = "Nenhum item encontrado.") {
   document.getElementById(tbodyId).innerHTML =
     `<tr class="state-row"><td colspan="${cols}">${msg}</td></tr>`
 }
+
+// ══════════════════════════════════════════
+//  UPLOAD DE IMAGEM
+//  prefix: "novo" ou "edit"
+// ══════════════════════════════════════════
+async function handleImageUpload(prefix) {
+  const input = document.getElementById(`${prefix}_file`)
+  const file  = input.files[0]
+  if (!file) return
+
+  setUploadState(prefix, "loading")
+
+  try {
+    const url = await uploadImagemSupabase(file)
+    document.getElementById(`${prefix}_imagem`).value = url
+    setUploadState(prefix, "done", url)
+    toast("🖼️ Imagem enviada com sucesso!")
+  } catch (err) {
+    setUploadState(prefix, "idle")
+    toast(`❌ Erro ao enviar imagem: ${err.message}`)
+  }
+}
+
+// Quando cola URL manualmente
+function syncUrlPreview(prefix) {
+  const url = document.getElementById(`${prefix}_imagem`).value.trim()
+  if (url) {
+    setUploadState(prefix, "done", url)
+  } else {
+    setUploadState(prefix, "idle")
+  }
+}
+
+function setUploadState(prefix, estadoAtual, url = null) {
+  const area        = document.getElementById(`${prefix}_upload_area`)
+  const preview     = document.getElementById(`${prefix}_preview`)
+  const placeholder = document.getElementById(`${prefix}_upload_placeholder`)
+  const loading     = document.getElementById(`${prefix}_upload_loading`)
+  if (!area) return
+
+  if (estadoAtual === "loading") {
+    placeholder.style.display = "none"
+    preview.style.display     = "none"
+    loading.style.display     = "flex"
+    area.classList.remove("has-image")
+  } else if (estadoAtual === "done" && url) {
+    loading.style.display     = "none"
+    placeholder.style.display = "none"
+    preview.src               = url
+    preview.style.display     = "block"
+    area.classList.add("has-image")
+  } else {
+    loading.style.display     = "none"
+    preview.style.display     = "none"
+    placeholder.style.display = "flex"
+    area.classList.remove("has-image")
+    if (preview) preview.src  = ""
+  }
+}
+
+function resetUpload(prefix) {
+  const input = document.getElementById(`${prefix}_file`)
+  if (input) input.value = ""
+  const urlInput = document.getElementById(`${prefix}_imagem`)
+  if (urlInput) urlInput.value = ""
+  setUploadState(prefix, "idle")
+}
+
+// Drag & drop
+document.addEventListener("DOMContentLoaded", () => {
+  ;["novo", "edit"].forEach(prefix => {
+    const area = document.getElementById(`${prefix}_upload_area`)
+    if (!area) return
+
+    area.addEventListener("dragover", e => {
+      e.preventDefault()
+      area.classList.add("drag-over")
+    })
+    area.addEventListener("dragleave", () => area.classList.remove("drag-over"))
+    area.addEventListener("drop", e => {
+      e.preventDefault()
+      area.classList.remove("drag-over")
+      const file = e.dataTransfer.files[0]
+      if (!file || !file.type.startsWith("image/")) return
+      const input = document.getElementById(`${prefix}_file`)
+      const dt    = new DataTransfer()
+      dt.items.add(file)
+      input.files = dt.files
+      handleImageUpload(prefix)
+    })
+  })
+})
 
 // ══════════════════════════════════════════
 //  ── PRESENTES ──
@@ -168,11 +308,7 @@ function popularCategorias(lista) {
 
 function renderTabelaPresentes(lista) {
   const tbody = document.getElementById("tabelaPresentes")
-
-  if (!lista.length) {
-    tabelaVazia("tabelaPresentes", 6)
-    return
-  }
+  if (!lista.length) { tabelaVazia("tabelaPresentes", 6); return }
 
   tbody.innerHTML = ""
   lista.forEach(p => {
@@ -207,7 +343,7 @@ function renderTabelaPresentes(lista) {
 }
 
 // ══════════════════════════════════════════
-//  NOVO PRESENTE — POST /api/presentes
+//  NOVO PRESENTE
 // ══════════════════════════════════════════
 document.getElementById("formNovoPresente").addEventListener("submit", async function (e) {
   e.preventDefault()
@@ -215,14 +351,12 @@ document.getElementById("formNovoPresente").addEventListener("submit", async fun
   btn.disabled = true
   btn.textContent = "Salvando…"
 
-  const pagamento = document.getElementById("novo_pagamento").value
-
   const body = {
     nome_presente:    document.getElementById("novo_nome").value.trim(),
     descricao:        document.getElementById("novo_descricao").value.trim(),
     valor:            parseFloat(document.getElementById("novo_valor").value),
     categoria:        document.getElementById("novo_categoria").value.trim() || "outros",
-    tipo_pagamento:   pagamento || null,
+    tipo_pagamento:   document.getElementById("novo_pagamento").value || null,
     url_image:        document.getElementById("novo_imagem").value.trim() || null,
     quantidade_total: parseInt(document.getElementById("novo_quantidade").value) || 1,
     ativo:            true,
@@ -240,6 +374,7 @@ document.getElementById("formNovoPresente").addEventListener("submit", async fun
     }
     fecharModal("modalNovoPresente")
     resetForm("formNovoPresente")
+    resetUpload("novo")
     toast("🎁 Presente adicionado com sucesso!")
     state.presentes.page = 1
     carregarPresentes()
@@ -260,7 +395,7 @@ async function verInfoReserva(id) {
   abrirModal("modalInfo")
 
   try {
-    const res  = await fetch(`${API_PRESENTES}/${id}`)
+    const res = await fetch(`${API_PRESENTES}/${id}`)
     if (!res.ok) throw new Error(res.status)
     const p = unwrap(await res.json())
 
@@ -272,22 +407,10 @@ async function verInfoReserva(id) {
     const r = p.reservado_por
     div.innerHTML = `
       <div class="info-grid">
-        <div class="info-item">
-          <label>Nome</label>
-          <div class="val">${r.nome_convidado || "—"}</div>
-        </div>
-        <div class="info-item">
-          <label>E-mail</label>
-          <div class="val">${r.email_convidado || "—"}</div>
-        </div>
-        <div class="info-item">
-          <label>Telefone</label>
-          <div class="val">${r.telefone_convidado || "—"}</div>
-        </div>
-        <div class="info-item">
-          <label>Data da Reserva</label>
-          <div class="val">${fmtData(r.criado_em)}</div>
-        </div>
+        <div class="info-item"><label>Nome</label><div class="val">${r.nome_convidado || "—"}</div></div>
+        <div class="info-item"><label>E-mail</label><div class="val">${r.email_convidado || "—"}</div></div>
+        <div class="info-item"><label>Telefone</label><div class="val">${r.telefone_convidado || "—"}</div></div>
+        <div class="info-item"><label>Data da Reserva</label><div class="val">${fmtData(r.criado_em)}</div></div>
         ${r.mensagem ? `<div class="info-item info-msg" style="grid-column:1/-1">"${r.mensagem}"</div>` : ""}
       </div>
     `
@@ -311,8 +434,16 @@ async function abrirEditar(id) {
     document.getElementById("edit_valor").value      = p.valor            ?? ""
     document.getElementById("edit_categoria").value  = p.categoria        || ""
     document.getElementById("edit_pagamento").value  = p.tipo_pagamento   || ""
-    document.getElementById("edit_imagem").value     = p.url_image        || ""
     document.getElementById("edit_quantidade").value = p.quantidade_total ?? 1
+
+    // Preenche imagem — se tiver URL existente já mostra o preview
+    const urlAtual = p.url_image || ""
+    document.getElementById("edit_imagem").value = urlAtual
+    if (urlAtual) {
+      setUploadState("edit", "done", urlAtual)
+    } else {
+      setUploadState("edit", "idle")
+    }
 
     abrirModal("modalEditar")
   } catch {
@@ -333,7 +464,7 @@ document.getElementById("formEditar").addEventListener("submit", async function 
     valor:            parseFloat(document.getElementById("edit_valor").value),
     categoria:        document.getElementById("edit_categoria").value,
     tipo_pagamento:   document.getElementById("edit_pagamento").value || null,
-    url_image:        document.getElementById("edit_imagem").value || null,
+    url_image:        document.getElementById("edit_imagem").value.trim() || null,
     quantidade_total: parseInt(document.getElementById("edit_quantidade").value),
   }
 
@@ -356,8 +487,7 @@ document.getElementById("formEditar").addEventListener("submit", async function 
 })
 
 // ══════════════════════════════════════════
-//  CANCELAR RESERVA (libera o presente)
-//  POST /api/presentes/:id/cancelar-reserva
+//  CANCELAR RESERVA
 // ══════════════════════════════════════════
 async function cancelarReserva(id) {
   if (!confirm("Deseja cancelar a reserva e liberar este presente?")) return
@@ -464,11 +594,7 @@ function atualizarStatsConvidados(lista, total) {
 
 function renderTabelaConvidados(lista) {
   const tbody = document.getElementById("tabelaConvidados")
-
-  if (!lista.length) {
-    tabelaVazia("tabelaConvidados", 4)
-    return
-  }
+  if (!lista.length) { tabelaVazia("tabelaConvidados", 4); return }
 
   tbody.innerHTML = ""
   lista.forEach(c => {
@@ -496,7 +622,7 @@ function renderTabelaConvidados(lista) {
 }
 
 // ══════════════════════════════════════════
-//  NOVO CONVIDADO — POST /api/confirmacoes
+//  NOVO CONVIDADO
 // ══════════════════════════════════════════
 document.getElementById("formNovoConvidado").addEventListener("submit", async function (e) {
   e.preventDefault()
@@ -504,7 +630,7 @@ document.getElementById("formNovoConvidado").addEventListener("submit", async fu
   btn.disabled = true
   btn.textContent = "Salvando…"
 
-  const nome = document.getElementById("novo_conv_nome").value.trim()
+  const nome       = document.getElementById("novo_conv_nome").value.trim()
   const confirmado = document.getElementById("novo_conv_confirmado").value === "true"
 
   if (!nome) {
@@ -556,22 +682,10 @@ async function verInfoConvidado(id) {
 
     div.innerHTML = `
       <div class="info-grid">
-        <div class="info-item">
-          <label>Nome do Convidado</label>
-          <div class="val">${c.nome_convidado}</div>
-        </div>
-        <div class="info-item">
-          <label>Status</label>
-          <div class="val">${badge}</div>
-        </div>
-        <div class="info-item">
-          <label>Data da Resposta</label>
-          <div class="val">${fmtData(c.criado_em)}</div>
-        </div>
-        <div class="info-item">
-          <label>ID</label>
-          <div class="val">#${c.id}</div>
-        </div>
+        <div class="info-item"><label>Nome do Convidado</label><div class="val">${c.nome_convidado}</div></div>
+        <div class="info-item"><label>Status</label><div class="val">${badge}</div></div>
+        <div class="info-item"><label>Data da Resposta</label><div class="val">${fmtData(c.criado_em)}</div></div>
+        <div class="info-item"><label>ID</label><div class="val">#${c.id}</div></div>
       </div>
     `
   } catch {

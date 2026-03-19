@@ -786,3 +786,77 @@ textarea { resize: none; height: 80px; }
 
   .toolbar input { min-width: 100%; }
 }
+
+/* ── BOTÃO LIBERAR RESERVA ── */
+.btn-icon.warning:hover {
+  background: #fef5ec;
+  border-color: #f5cba7;
+  color: #e67e22;
+  opacity: 1;
+}
+
+/* ══════════════════════════════════════════
+   UPLOAD DE IMAGEM
+══════════════════════════════════════════ */
+
+.upload-area {
+  border: 2px dashed #dde2ea;
+  border-radius: 10px;
+  padding: 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  min-height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafbfc;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-area:hover,
+.upload-area.drag-over {
+  border-color: #5d84c3;
+  background: #f0f5ff;
+}
+
+.upload-area.has-image {
+  border-style: solid;
+  border-color: #5d84c3;
+  padding: 6px;
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #aaa;
+  font-size: 0.82rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.upload-icon { font-size: 1.8rem; }
+
+.upload-sub {
+  font-size: 0.72rem;
+  color: #ccc;
+}
+
+.upload-preview {
+  width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  border-radius: 6px;
+  display: block;
+}
+
+.upload-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #888;
+  font-size: 0.85rem;
+  font-style: italic;
+}
